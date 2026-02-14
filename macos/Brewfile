@@ -61,5 +61,6 @@ if [personal].include? hostname
 end
 
 if [work].include? hostname
+  brew "libpq"
   brew "tombell/formulae/tmux-manager"
 end
