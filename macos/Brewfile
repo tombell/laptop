@@ -33,6 +33,8 @@ if [personal, work].include? hostname
   brew "git-delta"
   brew "jj"
   brew "jq"
+  brew "lazygit"
+  brew "lazyjj"
   brew "libyaml"
   brew "tmux"
   brew "mas"
@@ -61,6 +63,7 @@ if [personal].include? hostname
 end
 
 if [work].include? hostname
-  brew "libpq"
   brew "tombell/formulae/tmux-manager"
+
+  cask "linear-linear"
 end
