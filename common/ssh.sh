@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir -p ~/.ssh
+setup_ssh_key() {
+  local vault=$1
+  local name=$2
 
-echo "==> Setting up SSH keys…"
+  mkdir -p ~/.ssh
 
-[ -e "~/.ssh/Personal.pub" ] || op read "op://Personal/Personal/public key" >~/.ssh/Personal.pub
-[ -e "~/.ssh/Personal" ] || op read "op://Personal/Personal/private key" >~/.ssh/Personal
+  echo "==> Setting up SSH keys for ${name}…"
 
-chmod 600 ~/.ssh/Personal
-chmod 600 ~/.ssh/Personal.pub
+  [ -e "~/.ssh/${name}.pub" ] || op read "op://${vault}/${name}/public key" >~/.ssh/${name}.pub
+  [ -e "~/.ssh/${name}" ] || op read "op://${vault}/${name}/private key" >~/.ssh/${name}
+
+  chmod 600 ~/.ssh/${name}
+  chmod 600 ~/.ssh/${name}.pub
+}
