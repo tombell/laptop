@@ -11,6 +11,7 @@ fd
 ffmpeg
 fzf
 ghostty
+git-delta
 gnome-themes-extra
 greetd
 hypridle
@@ -21,6 +22,7 @@ hyprshot
 imagemagick
 impala
 imv
+jujutsu
 less
 libyaml
 man-db
