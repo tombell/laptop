@@ -18,7 +18,6 @@ brew 'ripgrep'
 brew 'starkwm/formulae/skbd'
 brew 'zoxide'
 brew 'zsh-autosuggestions'
-brew 'zsh-fast-syntax-highlighting'
 
 cask '1password-cli'
 cask '1password@nightly'
