@@ -43,7 +43,6 @@ if [personal, work].include? hostname
   cask 'discord'
   cask 'tombell/formulae/font-iosevka-custom'
   cask 'google-chrome'
-  cask 'karabiner-elements'
   cask 'postico'
   cask 'soundsource'
   cask 'starkwm/formulae/stark@tip'
