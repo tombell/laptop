@@ -12,7 +12,7 @@ if [ ! -d "$HOME/.dotfiles" ]; then
   git clone https://github.com/tombell/dotfiles.git "$HOME/.dotfiles"
 fi
 
-setup_dotfiles macos -- -S karabiner
+setup_dotfiles macos
 
 # TODO: log into 1password here so we can get SSH keys
 setup_ssh_key "Personal" "Personal"
