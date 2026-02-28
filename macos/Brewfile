@@ -15,7 +15,7 @@ brew 'fzf'
 brew 'mole'
 brew 'rcm'
 brew 'ripgrep'
-brew 'starkwm/formulae/skbd'
+brew 'starkwm/formulae/skbd@2'
 brew 'zoxide'
 brew 'zsh-autosuggestions'
 
