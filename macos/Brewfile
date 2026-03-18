@@ -49,16 +49,25 @@ if [personal, work].include? hostname
   cask 'superwhisper'
   cask 'telegram'
   cask 'tidal'
-  cask 'virtualbuddy'
-  cask 'yaak'
 
   mas 'Xcode', id: 497_799_835
 end
 
-brew 'transmission-cli' if [personal].include? hostname
+if [personal].include? hostname
+  brew 'transmission-cli'
+
+  cask 'virtualbuddy'
+  cask 'yaak'
+end
 
 if [work].include? hostname
+  brew 'cloudflared'
+  brew 'mailpit'
+  brew 'railway'
   brew 'tombell/formulae/tmux-manager'
 
+  cask 'claude'
+  cask 'claude-code'
   cask 'linear-linear'
+  cask 'mac-mouse-fix'
 end
