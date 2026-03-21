@@ -2,6 +2,7 @@
 set -euo pipefail
 
 sudo pacman -S --noconfirm --needed - <<EOF
+bat
 bluetui
 brightnessctl
 btop
@@ -11,7 +12,9 @@ fd
 ffmpeg
 fzf
 ghostty
+git
 git-delta
+github-cli
 gnome-themes-extra
 greetd
 hypridle
@@ -27,7 +30,6 @@ less
 libyaml
 man-db
 mise
-neovim
 openssh
 polkit-gnome
 qt6ct
@@ -52,5 +54,6 @@ yay -S --noconfirm --needed --removemake - <<EOF
 1password
 1password-cli
 google-chrome
+neovim-git
 rcm
 EOF
