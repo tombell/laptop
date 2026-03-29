@@ -6,7 +6,7 @@ echo "==> Installing fonts…"
 yay -S --noconfirm --needed --removemake apple-fonts noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-iosevkaterm-nerd
 
 if [ ! -f "$HOME/.local/share/fonts/IosevkaCustom.ttc" ]; then
-  FONT_VERSION=34.0.0
+  FONT_VERSION=34.3.0
 
   mkdir -p "$HOME/.local/share/fonts"
   curl -Os "https://tombell-homebrew-assets.s3.us-east-1.amazonaws.com/IosevkaCustom-$FONT_VERSION.zip"
