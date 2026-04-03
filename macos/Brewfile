@@ -55,6 +55,7 @@ end
 if [personal].include? hostname
   brew 'transmission-cli'
 
+  cask 'codex-app'
   cask 'superwhisper'
   cask 'virtualbuddy'
   cask 'yaak'
@@ -67,7 +68,7 @@ if [work].include? hostname
   brew 'tombell/formulae/tmux-manager'
 
   cask 'claude'
-  cask 'claude-code'
+  cask 'claude-code@latest'
   cask 'linear-linear'
   cask 'mac-mouse-fix'
 end
