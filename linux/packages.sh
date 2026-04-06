@@ -48,6 +48,7 @@ zoxide
 zsh
 zsh-autosuggestions
 zsh-completions
+zsh-syntax-highlighting
 EOF
 
 yay -S --noconfirm --needed --removemake - <<EOF
