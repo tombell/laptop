@@ -55,8 +55,10 @@ end
 if [personal].include? hostname
   brew 'transmission-cli'
 
+  cask 'codex'
   cask 'codex-app'
-  cask 'superwhisper'
+  cask 'handy'
+  cask 'rekordbox'
   cask 'virtualbuddy'
   cask 'yaak'
 end
