@@ -14,7 +14,7 @@ fi
 
 setup_dotfiles macos
 
-# TODO: log into 1password here so we can get SSH keys
+eval "$(op signin)"
 setup_ssh_key "Personal" "Personal"
 
 source "$(dirname "$0")/macos/defaults.sh"
