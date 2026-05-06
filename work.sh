@@ -17,6 +17,7 @@ setup_dotfiles macos work
 eval "$(op signin)"
 setup_ssh_key "Personal" "Personal"
 setup_ssh_key "Personal" "Work"
+killall ssh-agent
 
 source "$(dirname "$0")/macos/defaults.sh"
 source "$(dirname "$0")/common/mise.sh"
