@@ -71,6 +71,6 @@ if [work].include? hostname
 
   cask 'claude'
   cask 'claude-code@latest'
-  cask 'linear-linear'
+  cask 'linear'
   cask 'mac-mouse-fix'
 end
