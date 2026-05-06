@@ -14,8 +14,7 @@ fi
 
 setup_dotfiles macos work
 
-# TODO: log into 1password here so we can get SSH keys
-
+eval "$(op signin)"
 setup_ssh_key "Personal" "Personal"
 setup_ssh_key "Personal" "Work"
 
