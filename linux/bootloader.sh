@@ -4,7 +4,22 @@ set -euo pipefail
 echo "==> Setting up limine bootloader…"
 
 if [ ! -f "/etc/default/limine" ]; then
-  PARTUUID=$(blkid | grep 'TYPE="crypto_LUKS"' | sed -n 's/.*PARTUUID="\([^-"]*\(-[^"]*\)\{3\}\)".*/\1/p')
+  command -v blkid >/dev/null || {
+    echo "blkid is required to detect the encrypted root partition" >&2
+    exit 1
+  }
+
+  partuuids=()
+  while IFS= read -r partuuid; do
+    partuuids+=("$partuuid")
+  done < <(sudo blkid -t TYPE=crypto_LUKS -s PARTUUID -o value)
+
+  if [ "${#partuuids[@]}" -ne 1 ]; then
+    echo "Expected exactly one crypto_LUKS PARTUUID, found ${#partuuids[@]}" >&2
+    exit 1
+  fi
+
+  PARTUUID="${partuuids[0]}"
 
   sudo tee /etc/default/limine <<EOF >/dev/null
 KERNEL_CMDLINE[default]+="cryptdevice=PARTUUID=$PARTUUID:root"
@@ -44,15 +59,44 @@ term_background_bright: 24283b
 EOF
 fi
 
+command -v yay >/dev/null || {
+  echo "yay is required to install bootloader packages" >&2
+  exit 1
+}
+
 yay -S --noconfirm --needed --removemake zulu-21-bin
 yay -S --noconfirm --needed --removemake limine-mkinitcpio-hook
 
+command -v efibootmgr >/dev/null || {
+  echo "efibootmgr is required to inspect or create the boot manager entry" >&2
+  exit 1
+}
+
 if ! efibootmgr | grep -qi "Arch Linux UKI"; then
-  echo "==> Setting up unified kernal image boot manager entry…"
+  command -v findmnt >/dev/null || {
+    echo "findmnt is required to inspect /boot" >&2
+    exit 1
+  }
+
+  command -v lsblk >/dev/null || {
+    echo "lsblk is required to inspect /boot" >&2
+    exit 1
+  }
+
+  boot_source="$(findmnt -n -o SOURCE /boot)"
+  boot_disk="/dev/$(lsblk -no PKNAME "$boot_source")"
+  boot_part="$(lsblk -no PARTN "$boot_source")"
+
+  if [ -z "$boot_source" ] || [ "$boot_disk" = "/dev/" ] || [ -z "$boot_part" ]; then
+    echo "Could not determine /boot disk and partition" >&2
+    exit 1
+  fi
+
+  echo "==> Setting up unified kernel image boot manager entry…"
 
   sudo efibootmgr --create \
-    --disk "$(findmnt -n -o SOURCE /boot | sed 's/p\?[0-9]*$//')" \
-    --part "$(findmnt -n -o SOURCE /boot | grep -o 'p\?[0-9]*$' | sed 's/^p//')" \
+    --disk "$boot_disk" \
+    --part "$boot_part" \
     --label "Arch Linux UKI" \
     --loader "\\EFI\\Linux\\$(cat /etc/machine-id)_linux.efi"
 fi

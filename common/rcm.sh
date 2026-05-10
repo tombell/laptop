@@ -27,8 +27,19 @@ setup_dotfiles() {
 
   echo "==> Setting up dotfiles with rcm…"
 
-  rcup -d "${HOME}/.dotfiles" \
-    "${tag_args[@]}" \
-    -x LICENSE -x README.md -x scripts \
-    ${extra_args[@]+"${extra_args[@]}"}
+  command -v rcup >/dev/null || {
+    echo "rcup is required to set up dotfiles" >&2
+    exit 1
+  }
+
+  if [ "${#extra_args[@]}" -gt 0 ]; then
+    rcup -d "${HOME}/.dotfiles" \
+      "${tag_args[@]}" \
+      -x LICENSE -x README.md -x scripts \
+      "${extra_args[@]}"
+  else
+    rcup -d "${HOME}/.dotfiles" \
+      "${tag_args[@]}" \
+      -x LICENSE -x README.md -x scripts
+  fi
 }

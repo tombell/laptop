@@ -51,6 +51,11 @@ zsh-completions
 zsh-syntax-highlighting
 EOF
 
+command -v yay >/dev/null || {
+  echo "yay is required to install AUR packages" >&2
+  exit 1
+}
+
 yay -S --noconfirm --needed --removemake - <<EOF
 1password
 1password-cli

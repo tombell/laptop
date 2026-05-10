@@ -142,5 +142,5 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 # RESTART APPS
 ###############################################################################
 
-killall Dock
-killall Finder
+killall Dock 2>/dev/null || true
+killall Finder 2>/dev/null || true

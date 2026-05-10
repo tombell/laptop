@@ -3,19 +3,32 @@ set -euo pipefail
 
 echo "==> Setting up macOS laptop…"
 
-source "$(dirname "$0")/common/rcm.sh"
-source "$(dirname "$0")/common/ssh.sh"
+ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+export LAPTOP_ROOT="$ROOT_DIR"
 
-source "$(dirname "$0")/macos/homebrew.sh"
+source "$ROOT_DIR/common/rcm.sh"
+source "$ROOT_DIR/common/ssh.sh"
+
+source "$ROOT_DIR/macos/homebrew.sh"
 
 if [ ! -d "$HOME/.dotfiles" ]; then
+  command -v git >/dev/null || {
+    echo "git is required to clone dotfiles" >&2
+    exit 1
+  }
+
   git clone https://github.com/tombell/dotfiles.git "$HOME/.dotfiles"
 fi
 
 setup_dotfiles macos
 
+command -v op >/dev/null || {
+  echo "op is required to sign in to 1Password" >&2
+  exit 1
+}
+
 eval "$(op signin)"
 setup_ssh_key "Personal" "Personal"
 
-source "$(dirname "$0")/macos/defaults.sh"
-source "$(dirname "$0")/common/mise.sh"
+source "$ROOT_DIR/macos/defaults.sh"
+source "$ROOT_DIR/common/mise.sh"
