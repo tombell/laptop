@@ -22,7 +22,7 @@ fi
 
 setup_dotfiles linux
 
-# TODO: log into 1password here so we can get SSH keys
+eval "$(op signin)"
 setup_ssh_key "Personal" "Personal"
 
 source "$ROOT_DIR/linux/bootloader.sh"
