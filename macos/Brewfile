@@ -62,7 +62,6 @@ if [personal].include? hostname
   cask 'codex-app'
   cask 'handy'
   cask 'rekordbox'
-  cask 'tidal'
   cask 'virtualbuddy'
   cask 'yaak'
 end
