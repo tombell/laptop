@@ -44,6 +44,7 @@ if [personal, work].include? hostname
   brew 'tree'
   brew 'xz'
 
+  cask 'daisydisk'
   cask 'discord'
   cask 'tombell/formulae/font-iosevka-custom'
   cask 'google-chrome'
