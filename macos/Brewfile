@@ -64,7 +64,6 @@ if [personal].include? hostname
   cask 'handy'
   cask 'rekordbox'
   cask 'virtualbuddy'
-  cask 'yaak'
 end
 
 if [work].include? hostname
