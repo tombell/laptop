@@ -48,7 +48,6 @@ if [personal, work].include? hostname
   cask 'discord'
   cask 'tombell/formulae/font-iosevka-custom'
   cask 'google-chrome'
-  cask 'mac-mouse-fix'
   cask 'postico'
   cask 'soundsource'
   cask 'telegram'
@@ -57,13 +56,13 @@ if [personal, work].include? hostname
 end
 
 if [personal].include? hostname
+  brew 'ollama'
   brew 'transmission-cli'
 
   cask 'codex'
   cask 'codex-app'
   cask 'handy'
   cask 'rekordbox'
-  cask 'virtualbuddy'
 end
 
 if [work].include? hostname
@@ -75,4 +74,5 @@ if [work].include? hostname
   cask 'claude'
   cask 'claude-code'
   cask 'linear'
+  cask 'mac-mouse-fix'
 end
