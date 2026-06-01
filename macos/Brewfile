@@ -72,7 +72,7 @@ if [work].include? hostname
   brew 'tombell/formulae/tmux-manager'
 
   cask 'claude'
-  cask 'claude-code'
+  cask 'claude-code@latest'
   cask 'linear'
   cask 'mac-mouse-fix'
 end
