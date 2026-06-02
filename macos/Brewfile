@@ -38,8 +38,6 @@ if [personal, work].include? hostname
   brew 'libyaml'
   brew 'mas'
   brew 'mise'
-  brew 'postgresql@18'
-  brew 'redis'
   brew 'tmux'
   brew 'tree'
   brew 'xz'
@@ -68,7 +66,9 @@ end
 if [work].include? hostname
   brew 'cloudflared'
   brew 'mailpit'
+  brew 'postgresql@18'
   brew 'railway'
+  brew 'redis'
   brew 'tombell/formulae/tmux-manager'
 
   cask 'claude'
