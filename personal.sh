@@ -20,7 +20,7 @@ if [ ! -d "$HOME/.dotfiles" ]; then
   git clone https://github.com/tombell/dotfiles.git "$HOME/.dotfiles"
 fi
 
-setup_dotfiles macos
+setup_dotfiles macos personal
 
 command -v op >/dev/null || {
   echo "op is required to sign in to 1Password" >&2
