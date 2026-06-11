@@ -6,8 +6,8 @@ work = 'Haze'
 
 hostname = `scutil --get ComputerName`.chomp
 
-tap 'starkwm/formulae'
-tap 'tombell/formulae'
+tap 'starkwm/formulae', trusted: true
+tap 'tombell/formulae', trusted: true
 
 brew 'bat'
 brew 'fd'
