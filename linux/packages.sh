@@ -1,65 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-sudo pacman -S --noconfirm --needed - <<EOF
-bat
-bluetui
-brightnessctl
-btop
-dunst
-fastfetch
-fd
-ffmpeg
-fzf
-ghostty
-git
-git-delta
-github-cli
-gnome-themes-extra
-greetd
-hypridle
-hyprland
-hyprlock
-hyprpaper
-hyprshot
-imagemagick
-impala
-imv
-jujutsu
-less
-libyaml
-man-db
-mise
-openssh
-polkit-gnome
-qt6ct
-ripgrep
-rofi
-unzip
-usage
-uwsm
-waybar
-wireless-regdb
-wiremix
-xdg-desktop-portal-gtk
-xdg-desktop-portal-hyprland
-xdg-user-dirs
-zoxide
-zsh
-zsh-autosuggestions
-zsh-completions
-zsh-syntax-highlighting
-EOF
+LAPTOP_ROOT="${LAPTOP_ROOT:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
+
+mapfile -t pacman_packages <"$LAPTOP_ROOT/linux/packages/pacman.txt"
+sudo pacman -S --noconfirm --needed "${pacman_packages[@]}"
 
 command -v yay >/dev/null || {
   echo "yay is required to install AUR packages" >&2
   exit 1
 }
 
-yay -S --noconfirm --needed --removemake - <<EOF
-1password
-1password-cli
-google-chrome
-neovim-git
-rcm
-EOF
+mapfile -t aur_packages <"$LAPTOP_ROOT/linux/packages/aur.txt"
+yay -S --noconfirm --needed --removemake "${aur_packages[@]}"
