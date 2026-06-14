@@ -1,1 +1,72 @@
 # laptop
+
+Scripts for setting up my personal/work macOS laptops and my Arch Linux ThinkPad.
+
+## Usage
+
+```sh
+./personal.sh
+./work.sh
+./thinkpad.sh
+```
+
+The macOS wrappers delegate to the profile-aware entrypoint:
+
+```sh
+./mac.sh personal
+./mac.sh work
+```
+
+## What each profile does
+
+### Personal macOS
+
+- Installs Homebrew if needed
+- Installs packages from `macos/Brewfile`
+- Clones `https://github.com/tombell/dotfiles.git` into `~/.dotfiles` if needed
+- Runs `rcup` with `macos` and `personal` tags
+- Signs in to 1Password CLI
+- Installs the `Personal` SSH key
+- Applies macOS defaults
+- Installs mise tools
+
+### Work macOS
+
+- Installs Homebrew if needed
+- Installs packages from `macos/Brewfile`
+- Clones dotfiles if needed
+- Runs `rcup` with `macos` and `work` tags
+- Signs in to 1Password CLI
+- Installs the `Personal` and `Work` SSH keys
+- Restarts `ssh-agent`
+- Applies macOS defaults
+- Installs mise tools
+
+### ThinkPad Linux
+
+Assumes Arch Linux.
+
+- Configures pacman and updates the system
+- Installs `yay`
+- Installs packages from:
+  - `linux/packages/pacman.txt`
+  - `linux/packages/aur.txt`
+- Clones dotfiles if needed
+- Runs `rcup` with the `linux` tag
+- Signs in to 1Password CLI
+- Installs the `Personal` SSH key
+- Configures bootloader, snapshots, fonts, greetd, shell, GUI settings, and mise tools
+
+## Assumptions
+
+- Dotfiles live at `https://github.com/tombell/dotfiles.git`
+- 1Password CLI is available before SSH keys are configured
+- SSH keys are stored in 1Password items named after the key, with fields:
+  - `public key`
+  - `private key`
+- macOS package selection is controlled by hostname in `macos/Brewfile`
+- Linux setup is intended for the ThinkPad Arch install, not a generic Linux machine
+
+## Re-running
+
+The scripts are intended to be safe to rerun. Package installs use `--needed` where available, dotfiles are cloned only when missing, and SSH keys are only written when the target files do not already exist.
