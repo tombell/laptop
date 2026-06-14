@@ -3,7 +3,7 @@ set -euo pipefail
 
 echo "==> Setting up greetd login manager…"
 
-if ! grep -qi "hyprland" "/etc/greetd/config.toml"; then
+if ! grep -qi "hyprland" "/etc/greetd/config.toml" 2>/dev/null; then
   sudo tee /etc/greetd/config.toml <<EOF >/dev/null
 [terminal]
 vt = 1
