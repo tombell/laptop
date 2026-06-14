@@ -17,10 +17,10 @@ setup_dotfiles linux
 signin_1password
 setup_ssh_key "Personal" "Personal"
 
-source "$ROOT_DIR/linux/bootloader.sh"
-source "$ROOT_DIR/linux/snapshots.sh"
+source "$ROOT_DIR/linux/thinkpad/bootloader.sh"
+source "$ROOT_DIR/linux/thinkpad/snapshots.sh"
 source "$ROOT_DIR/linux/fonts.sh"
-source "$ROOT_DIR/linux/login-manager.sh"
+source "$ROOT_DIR/linux/thinkpad/login-manager.sh"
 source "$ROOT_DIR/linux/shell.sh"
 source "$ROOT_DIR/linux/gui.sh"
 source "$ROOT_DIR/common/mise.sh"
