@@ -24,7 +24,7 @@ brew 'zsh-syntax-highlighting'
 cask '1password-cli'
 cask '1password@nightly'
 cask 'appcleaner'
-cask 'ghostty@tip'
+cask 'ghostty'
 cask 'keka'
 cask 'keyboardcleantool'
 
@@ -34,13 +34,11 @@ if [personal, work].include? hostname
   brew 'git-delta'
   brew 'jj'
   brew 'jq'
-  brew 'libpq'
   brew 'libyaml'
   brew 'mas'
   brew 'mise'
   brew 'tmux'
-  brew 'tree'
-  brew 'xz'
+  brew 'tombell/formulae/tmux-manager'
 
   cask 'daisydisk'
   cask 'discord'
@@ -48,28 +46,30 @@ if [personal, work].include? hostname
   cask 'google-chrome'
   cask 'postico'
   cask 'soundsource'
+  cask 'tailscale-app'
   cask 'telegram'
-
-  mas 'Xcode', id: 497_799_835
 end
 
 if [personal].include? hostname
   brew 'ollama'
   brew 'transmission-cli'
+  brew 'xcbeautify'
 
   cask 'codex'
   cask 'codex-app'
   cask 'handy'
   cask 'rekordbox'
+
+  mas 'Xcode', id: 497_799_835
 end
 
 if [work].include? hostname
   brew 'cloudflared'
+  brew 'libpq'
   brew 'mailpit'
   brew 'postgresql@18'
   brew 'railway'
   brew 'redis'
-  brew 'tombell/formulae/tmux-manager'
 
   cask 'claude'
   cask 'claude-code@latest'
