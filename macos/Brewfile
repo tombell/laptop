@@ -3,6 +3,7 @@
 
 personal = 'Pyra'
 work = 'Haze'
+agent = 'Brighid'
 
 hostname = `scutil --get ComputerName`.chomp
 
@@ -26,9 +27,8 @@ cask '1password@nightly'
 cask 'appcleaner'
 cask 'ghostty'
 cask 'keka'
-cask 'keyboardcleantool'
 
-if [personal, work].include? hostname
+if [personal, work, agent].include? hostname
   brew 'gh'
   brew 'git'
   brew 'git-delta'
@@ -41,12 +41,16 @@ if [personal, work].include? hostname
   brew 'tombell/formulae/tmux-manager'
 
   cask 'daisydisk'
-  cask 'discord'
   cask 'tombell/formulae/font-iosevka-custom'
   cask 'google-chrome'
+  cask 'tailscale-app'
+end
+
+if [personal, work].include? hostname
+  cask 'discord'
+  cask 'keyboardcleantool'
   cask 'postico'
   cask 'soundsource'
-  cask 'tailscale-app'
   cask 'telegram'
 end
 
