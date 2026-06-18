@@ -54,13 +54,16 @@ if [personal, work].include? hostname
   cask 'telegram'
 end
 
+if [personal, agent].include? hostname
+  cask 'codex'
+  cask 'codex-app'
+end
+
 if [personal].include? hostname
   brew 'ollama'
   brew 'transmission-cli'
   brew 'xcbeautify'
 
-  cask 'codex'
-  cask 'codex-app'
   cask 'handy'
   cask 'rekordbox'
 
