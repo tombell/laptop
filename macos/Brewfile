@@ -61,7 +61,6 @@ end
 
 if [personal].include? hostname
   brew 'ollama'
-  brew 'transmission-cli'
   brew 'xcbeautify'
 
   cask 'handy'
@@ -82,4 +81,9 @@ if [work].include? hostname
   cask 'claude-code@latest'
   cask 'linear'
   cask 'mac-mouse-fix'
+end
+
+if [agent].include? hostname
+  # TODO: ...
+  brew 'transmission-cli'
 end
