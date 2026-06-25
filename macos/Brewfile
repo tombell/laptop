@@ -60,9 +60,6 @@ if [personal, agent].include? hostname
 end
 
 if [personal].include? hostname
-  brew 'ollama'
-  brew 'xcbeautify'
-
   cask 'handy'
   cask 'rekordbox'
 
