@@ -16,8 +16,6 @@ brew 'gum'
 brew 'mole'
 brew 'rcm'
 brew 'ripgrep'
-brew 'starkwm/formulae/skbd@2'
-brew 'starkwm/formulae/swm'
 brew 'zoxide'
 brew 'zsh-autosuggestions'
 brew 'zsh-syntax-highlighting'
@@ -37,8 +35,6 @@ if [personal, work, agent].include? hostname
   brew 'libyaml'
   brew 'mas'
   brew 'mise'
-  brew 'tmux'
-  brew 'tombell/formulae/tmux-manager'
 
   cask 'daisydisk'
   cask 'tombell/formulae/font-iosevka-custom'
@@ -47,6 +43,11 @@ if [personal, work, agent].include? hostname
 end
 
 if [personal, work].include? hostname
+  brew 'starkwm/formulae/skbd@2'
+  brew 'starkwm/formulae/swm'
+  brew 'tmux'
+  brew 'tombell/formulae/tmux-manager'
+
   cask 'discord'
   cask 'keyboardcleantool'
   cask 'postico'
