@@ -43,6 +43,7 @@ if [personal, work, agent].include? hostname
 end
 
 if [personal, work].include? hostname
+  brew 'herdr'
   brew 'starkwm/formulae/skbd@2'
   brew 'starkwm/formulae/swm'
   brew 'tmux'
