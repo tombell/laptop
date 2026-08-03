@@ -49,6 +49,7 @@ if [personal, work].include? hostname
   brew 'starkwm/formulae/skbd@2'
   brew 'starkwm/formulae/swm'
   brew 'tmux'
+  brew 'tombell/formulae/tendr'
   brew 'tombell/formulae/tmux-manager'
 
   cask 'discord'
