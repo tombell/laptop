@@ -36,6 +36,8 @@ if [personal, work, agent].include? hostname
   brew 'mas'
   brew 'mise'
 
+  cask 'chatgpt'
+  cask 'codex'
   cask 'daisydisk'
   cask 'tombell/formulae/font-iosevka-custom'
   cask 'google-chrome'
@@ -54,11 +56,6 @@ if [personal, work].include? hostname
   cask 'postico'
   cask 'soundsource'
   cask 'telegram'
-end
-
-if [personal, agent].include? hostname
-  cask 'codex'
-  cask 'codex-app'
 end
 
 if [personal].include? hostname
@@ -83,6 +80,8 @@ if [work].include? hostname
 end
 
 if [agent].include? hostname
-  # TODO: ...
+  brew 'ffmpeg'
   brew 'transmission-cli'
+
+  cask 'hermes-desktop'
 end
