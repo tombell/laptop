@@ -44,3 +44,4 @@ fi
 
 source "$ROOT_DIR/macos/defaults.sh"
 source "$ROOT_DIR/common/mise.sh"
+source "$ROOT_DIR/common/herdr.sh"
