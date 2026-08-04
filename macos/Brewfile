@@ -30,11 +30,13 @@ if [personal, work, agent].include? hostname
   brew 'gh'
   brew 'git'
   brew 'git-delta'
+  brew 'herdr'
   brew 'jj'
   brew 'jq'
   brew 'libyaml'
   brew 'mas'
   brew 'mise'
+  brew 'tombell/formulae/tendr', args: ['HEAD']
 
   cask 'chatgpt'
   cask 'codex'
@@ -45,10 +47,8 @@ if [personal, work, agent].include? hostname
 end
 
 if [personal, work].include? hostname
-  brew 'herdr'
   brew 'starkwm/formulae/skbd@2'
   brew 'starkwm/formulae/swm'
-  brew 'tombell/formulae/tendr', args: ['HEAD']
 
   cask 'discord'
   cask 'keyboardcleantool'
