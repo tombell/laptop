@@ -35,11 +35,13 @@ setup_dotfiles() {
   if [ "${#extra_args[@]}" -gt 0 ]; then
     rcup -d "${HOME}/.dotfiles" \
       "${tag_args[@]}" \
+      -S agents/skills \
       -x LICENSE -x README.md -x scripts \
       "${extra_args[@]}"
   else
     rcup -d "${HOME}/.dotfiles" \
       "${tag_args[@]}" \
+      -S agents/skills \
       -x LICENSE -x README.md -x scripts
   fi
 }
