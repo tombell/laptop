@@ -45,6 +45,8 @@ if [personal, work, agent].include? hostname
   cask 'tombell/formulae/font-iosevka-custom'
   cask 'google-chrome'
   cask 'tailscale-app'
+
+  mas 'Xcode', id: 497_799_835
 end
 
 if [personal, work].include? hostname
@@ -61,8 +63,6 @@ end
 if [personal].include? hostname
   cask 'handy'
   cask 'rekordbox'
-
-  mas 'Xcode', id: 497_799_835
 end
 
 if [work].include? hostname
