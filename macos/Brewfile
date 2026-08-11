@@ -12,7 +12,7 @@ tap 'tombell/formulae', trusted: true
 
 brew 'bat'
 brew 'fd'
-brew 'gum'
+brew 'fzf'
 brew 'mole'
 brew 'rcm'
 brew 'ripgrep'
