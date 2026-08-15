@@ -1,10 +1,11 @@
-.PHONY: check check-syntax shellcheck personal work thinkpad
+.PHONY: check check-syntax shellcheck personal work server thinkpad
 .SILENT:
 
 SHELL_SCRIPTS := \
 	mac.sh \
 	personal.sh \
 	work.sh \
+	server.sh \
 	thinkpad.sh \
 	$(wildcard common/*.sh) \
 	$(wildcard linux/*.sh) \
@@ -24,6 +25,9 @@ personal:
 
 work:
 	./work.sh
+
+server:
+	./server.sh
 
 thinkpad:
 	./thinkpad.sh

@@ -1,12 +1,13 @@
 # laptop
 
-Scripts for setting up my personal/work macOS laptops and my Arch Linux ThinkPad.
+Scripts for setting up my personal/work macOS laptops, macOS server, and Arch Linux ThinkPad.
 
 ## Usage
 
 ```sh
 ./personal.sh
 ./work.sh
+./server.sh
 ./thinkpad.sh
 ```
 
@@ -15,6 +16,7 @@ The macOS wrappers delegate to the profile-aware entrypoint:
 ```sh
 ./mac.sh personal
 ./mac.sh work
+./mac.sh server
 ```
 
 ## What each profile does
@@ -41,6 +43,17 @@ The macOS wrappers delegate to the profile-aware entrypoint:
 - Signs in to 1Password CLI
 - Installs the `Personal` and `Work` SSH keys
 - Restarts `ssh-agent`
+- Applies macOS defaults
+- Installs mise tools
+
+### macOS Server
+
+- Installs Homebrew if needed
+- Installs packages from `macos/Brewfile`
+- Clones dotfiles if needed
+- Runs `rcup` with `macos`, `personal`, and `server` tags
+- Signs in to 1Password CLI
+- Installs the `Personal` SSH key
 - Applies macOS defaults
 - Installs mise tools
 
