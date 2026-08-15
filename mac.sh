@@ -18,7 +18,7 @@ work)
   ;;
 server)
   echo "==> Setting up macOS server…"
-  dotfile_tags=(macos personal server)
+  dotfile_tags=(server macos personal)
   ssh_keys=(Personal)
   restart_ssh_agent=false
   ;;
