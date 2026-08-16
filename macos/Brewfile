@@ -63,10 +63,7 @@ if [personal, work].include? hostname
   cask 'telegram'
 end
 
-if [personal].include? hostname
-  cask 'handy'
-  cask 'rekordbox'
-end
+cask 'rekordbox' if [personal].include? hostname
 
 if [work].include? hostname
   brew 'cloudflared'
@@ -84,6 +81,7 @@ end
 
 if [agent].include? hostname
   brew 'ffmpeg'
+  brew 'imagemagick'
   brew 'transmission-cli'
 
   cask 'hermes-desktop'
