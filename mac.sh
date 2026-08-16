@@ -36,6 +36,10 @@ source "$ROOT_DIR/common/ssh.sh"
 
 source "$ROOT_DIR/macos/homebrew.sh"
 
+if [ "$profile" = personal ] || [ "$profile" = work ]; then
+  source "$ROOT_DIR/macos/shell.sh"
+fi
+
 ensure_dotfiles
 setup_dotfiles "${dotfile_tags[@]}"
 
