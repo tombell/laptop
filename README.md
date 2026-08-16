@@ -19,6 +19,15 @@ The macOS wrappers delegate to the profile-aware entrypoint:
 ./mac.sh server
 ```
 
+## Checks
+
+Run ShellCheck and Bash's syntax checker directly:
+
+```sh
+shellcheck {,common/,linux/,linux/thinkpad/,macos/}*.sh
+bash -n {,common/,linux/,linux/thinkpad/,macos/}*.sh
+```
+
 ## What each profile does
 
 ### Personal macOS
