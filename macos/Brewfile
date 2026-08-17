@@ -54,7 +54,6 @@ if [personal, work].include? hostname
   brew 'starkwm/formulae/skbd@2'
   brew 'starkwm/formulae/swm'
 
-  cask 'chatgpt'
   cask 'conjuror-app/tap/conjuror@alpha'
   cask 'discord'
   cask 'keyboardcleantool'
@@ -63,7 +62,10 @@ if [personal, work].include? hostname
   cask 'telegram'
 end
 
-cask 'rekordbox' if [personal].include? hostname
+if [personal].include? hostname
+  cask 'chatgpt'
+  cask 'rekordbox'
+end
 
 if [work].include? hostname
   brew 'cloudflared'
