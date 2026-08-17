@@ -8,7 +8,7 @@ command -v yay >/dev/null || {
   exit 1
 }
 
-yay -S --noconfirm --needed --removemake limine-snapper-sync snap-pac
+yay -S --noconfirm --needed --removemake snap-pac
 
 command -v snapper >/dev/null || {
   echo "snapper is required to configure btrfs snapshots" >&2
@@ -26,5 +26,3 @@ fi
 sudo sed -i 's/^TIMELINE_CREATE="yes"/TIMELINE_CREATE="no"/' /etc/snapper/configs/{root,home}
 sudo sed -i 's/^NUMBER_LIMIT="50"/NUMBER_LIMIT="5"/' /etc/snapper/configs/{root,home}
 sudo sed -i 's/^NUMBER_LIMIT_IMPORTANT="10"/NUMBER_LIMIT_IMPORTANT="5"/' /etc/snapper/configs/{root,home}
-
-sudo systemctl enable --now limine-snapper-sync.service

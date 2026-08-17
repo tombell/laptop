@@ -64,39 +64,20 @@ command -v yay >/dev/null || {
   exit 1
 }
 
-yay -S --noconfirm --needed --removemake zulu-21-bin
-yay -S --noconfirm --needed --removemake limine-mkinitcpio-hook
+yay -S --noconfirm --needed --removemake limine-tool
 
-command -v efibootmgr >/dev/null || {
-  echo "efibootmgr is required to inspect or create the boot manager entry" >&2
+command -v limine-install >/dev/null || {
+  echo "limine-install is required to install the bootloader" >&2
   exit 1
 }
 
-if ! efibootmgr | grep -qi "Arch Linux UKI"; then
-  command -v findmnt >/dev/null || {
-    echo "findmnt is required to inspect /boot" >&2
-    exit 1
-  }
+command -v limine-mkinitcpio >/dev/null || {
+  echo "limine-mkinitcpio is required to build kernel entries" >&2
+  exit 1
+}
 
-  command -v lsblk >/dev/null || {
-    echo "lsblk is required to inspect /boot" >&2
-    exit 1
-  }
+echo "==> Installing Limine and registering its UEFI entry…"
+sudo limine-install
 
-  boot_source="$(findmnt -n -o SOURCE /boot)"
-  boot_disk="/dev/$(lsblk -no PKNAME "$boot_source")"
-  boot_part="$(lsblk -no PARTN "$boot_source")"
-
-  if [ -z "$boot_source" ] || [ "$boot_disk" = "/dev/" ] || [ -z "$boot_part" ]; then
-    echo "Could not determine /boot disk and partition" >&2
-    exit 1
-  fi
-
-  echo "==> Setting up unified kernel image boot manager entry…"
-
-  sudo efibootmgr --create \
-    --disk "$boot_disk" \
-    --part "$boot_part" \
-    --label "Arch Linux UKI" \
-    --loader "\\EFI\\Linux\\$(cat /etc/machine-id)_linux.efi"
-fi
+echo "==> Building Limine kernel entries…"
+sudo limine-mkinitcpio
