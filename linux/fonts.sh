@@ -8,7 +8,7 @@ command -v yay >/dev/null || {
   exit 1
 }
 
-yay -S --noconfirm --needed --removemake apple-fonts noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-iosevkaterm-nerd
+yay -S --noconfirm --needed --removemake noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-iosevkaterm-nerd
 
 FONT_VERSION=34.3.0
 
