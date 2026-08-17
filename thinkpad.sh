@@ -10,6 +10,7 @@ source "$ROOT_DIR/common/ssh.sh"
 source "$ROOT_DIR/linux/pacman.sh"
 source "$ROOT_DIR/linux/aur.sh"
 source "$ROOT_DIR/linux/packages.sh"
+source "$ROOT_DIR/linux/keyring.sh"
 
 ensure_dotfiles
 setup_dotfiles linux

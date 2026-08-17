@@ -2,7 +2,6 @@ bat
 bluetui
 brightnessctl
 btop
-dunst
 fastfetch
 fd
 ffmpeg
@@ -11,12 +10,12 @@ ghostty
 git
 git-delta
 github-cli
+gnome-keyring
 gnome-themes-extra
 greetd
 hypridle
 hyprland
 hyprlock
-hyprpaper
 hyprshot
 imagemagick
 impala
@@ -29,12 +28,11 @@ mise
 openssh
 polkit-gnome
 qt6ct
+quickshell
 ripgrep
-rofi
 unzip
 usage
 uwsm
-waybar
 wireless-regdb
 wiremix
 xdg-desktop-portal-gtk
