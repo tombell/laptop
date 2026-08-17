@@ -34,7 +34,7 @@ bash -n {,common/,linux/,linux/thinkpad/,macos/}*.sh
 
 - Installs Homebrew if needed
 - Installs packages from `macos/Brewfile`
-- Sets `/opt/homebrew/bin/fish` as the user shell
+- Sets Homebrew's `fish` as the user shell
 - Installs Herdr Navigator v0.3.5 and Herdr JJ Status
 - Clones `https://github.com/tombell/dotfiles.git` into `~/.dotfiles` if needed
 - Runs `rcup` with `macos` and `personal` tags
@@ -47,7 +47,7 @@ bash -n {,common/,linux/,linux/thinkpad/,macos/}*.sh
 
 - Installs Homebrew if needed
 - Installs packages from `macos/Brewfile`
-- Sets `/opt/homebrew/bin/fish` as the user shell
+- Sets Homebrew's `fish` as the user shell
 - Installs Herdr Navigator v0.3.5 and Herdr JJ Status
 - Clones dotfiles if needed
 - Runs `rcup` with `macos` and `work` tags
@@ -61,6 +61,7 @@ bash -n {,common/,linux/,linux/thinkpad/,macos/}*.sh
 
 - Installs Homebrew if needed
 - Installs packages from `macos/Brewfile`
+- Sets Homebrew's `fish` as the user shell
 - Clones dotfiles if needed
 - Runs `rcup` with `macos`, `personal`, and `server` tags
 - Signs in to 1Password CLI

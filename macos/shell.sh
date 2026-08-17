@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-fish_shell=/opt/homebrew/bin/fish
+case "$(uname -m)" in
+x86_64)
+  homebrew_prefix=/usr/local
+  ;;
+arm64)
+  homebrew_prefix=/opt/homebrew
+  ;;
+*)
+  echo "Unsupported macOS architecture: $(uname -m)" >&2
+  exit 1
+  ;;
+esac
+
+fish_shell="$homebrew_prefix/bin/fish"
 
 if [ ! -x "$fish_shell" ]; then
   echo "Homebrew fish was not found at $fish_shell" >&2
