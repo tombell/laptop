@@ -19,8 +19,6 @@ brew 'mole'
 brew 'rcm'
 brew 'ripgrep'
 brew 'zoxide'
-brew 'zsh-autosuggestions'
-brew 'zsh-syntax-highlighting'
 
 cask '1password-cli'
 cask '1password@nightly'
@@ -38,7 +36,6 @@ if [personal, work, agent].include? hostname
   brew 'libyaml'
   brew 'mas'
   brew 'mise'
-  brew 'tombell/formulae/codex-sync', args: ['HEAD']
   brew 'tombell/formulae/tendr', args: ['HEAD']
 
   cask 'codex'
