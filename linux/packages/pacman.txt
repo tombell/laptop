@@ -27,6 +27,7 @@ man-db
 mise
 openssh
 polkit-gnome
+plymouth
 qt6ct
 quickshell
 ripgrep

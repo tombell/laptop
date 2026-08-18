@@ -24,7 +24,7 @@ if [ ! -f "/etc/default/limine" ]; then
   sudo tee /etc/default/limine <<EOF >/dev/null
 KERNEL_CMDLINE[default]+="cryptdevice=PARTUUID=$PARTUUID:root"
 KERNEL_CMDLINE[default]+="root=/dev/mapper/root rootflags=subvol=@ rw rootfstype=btrfs zswap.enabled=0"
-KERNEL_CMDLINE[default]+="quiet loglevel=0 systemd.show_status=auto udev.log_level=0 vt.global_cursor_default=0 modprobe.blacklist=sp5100_tco"
+KERNEL_CMDLINE[default]+="quiet splash loglevel=0 rd.systemd.show_status=false systemd.show_status=false udev.log_level=3 vt.global_cursor_default=0 modprobe.blacklist=sp5100_tco"
 
 ENABLE_UKI=yes
 
@@ -37,6 +37,14 @@ BOOT_ORDER="*, *fallback, Snapshots"
 MAX_SNAPSHOT_ENTRIES=5
 SNAPSHOT_FORMAT_CHOICE=5
 EOF
+fi
+
+echo "==> Configuring Plymouth…"
+if ! grep -Eq '^MODULES=.*\bamdgpu\b' /etc/mkinitcpio.conf; then
+  sudo sed -Ei 's/^MODULES=\((.*)\)$/MODULES=(amdgpu \1)/' /etc/mkinitcpio.conf
+fi
+if ! grep -Eq '^HOOKS=.*\bplymouth\b' /etc/mkinitcpio.conf; then
+  sudo sed -Ei 's/\budev\b/udev plymouth/' /etc/mkinitcpio.conf
 fi
 
 if [ ! -f "/boot/limine.conf" ]; then
