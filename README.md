@@ -1,6 +1,6 @@
 # laptop
 
-Scripts for setting up my personal/work macOS laptops, macOS server, and Arch Linux ThinkPad.
+Scripts for setting up my personal/work macOS laptops, macOS server, Arch Linux ThinkPad, and Raspberry Pi.
 
 ## Usage
 
@@ -9,6 +9,7 @@ Scripts for setting up my personal/work macOS laptops, macOS server, and Arch Li
 ./work.sh
 ./server.sh
 ./thinkpad.sh
+./rpi.sh
 ```
 
 The macOS wrappers delegate to the profile-aware entrypoint:
@@ -68,6 +69,11 @@ bash -n {,common/,linux/,linux/thinkpad/,macos/}*.sh
 - Installs the `Personal` SSH key
 - Applies macOS defaults
 - Installs mise tools
+
+### Raspberry Pi
+
+- Clones dotfiles if needed
+- Runs `rcup` with no tags to install the base dotfiles
 
 ### ThinkPad Linux
 
