@@ -21,6 +21,9 @@ ensure_dotfiles() {
   if [ ! -d "$HOME/.dotfiles" ]; then
     require_command git "clone dotfiles"
     git clone https://github.com/tombell/dotfiles.git "$HOME/.dotfiles"
+  else
+    echo "==> Updating dotfiles…"
+    git -C "$HOME/.dotfiles" pull --ff-only
   fi
 }
 
