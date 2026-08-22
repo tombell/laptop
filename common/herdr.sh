@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-require_command herdr "install Herdr plugins"
+if ! command -v herdr &>/dev/null; then
+  echo "==> herdr not found, skipping plugin installation"
+  return
+fi
 
 install_herdr_plugin() {
   local plugin_id=$1
