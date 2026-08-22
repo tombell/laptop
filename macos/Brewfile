@@ -7,6 +7,7 @@ agent = 'Brighid'
 
 hostname = `scutil --get ComputerName`.chomp
 
+tap 'anomalyco/tap', trusted: true
 tap 'conjuror-app/tap', trusted: true
 tap 'starkwm/formulae', trusted: true
 tap 'tombell/formulae', trusted: true
@@ -27,6 +28,7 @@ cask 'ghostty@tip'
 cask 'keka'
 
 if [personal, work, agent].include? hostname
+  brew 'anomalyco/tap/opencode'
   brew 'gh'
   brew 'git'
   brew 'git-delta'
