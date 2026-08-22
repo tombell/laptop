@@ -32,10 +32,10 @@ defaults write com.apple.dock size-immutable -int 1
 # Desktop & Stage Manager: Click wallpaper to reveal desktop
 defaults write com.apple.WindowManager EnableStandardClickToShowDesktop -int 0
 
-# Widgets: Show widgets on desktop
+# Widgets: Hide widgets on desktop
 defaults write com.apple.WindowManager StandardHideWidgets -int 1
 
-# Widgets: Show widgets in stage manager
+# Widgets: Hide widgets in stage manager
 defaults write com.apple.WindowManager StageManagerHideWidgets -int 1
 
 # Automatically rearrange Spaces based on most recent use
