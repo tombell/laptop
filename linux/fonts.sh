@@ -11,6 +11,7 @@ command -v yay >/dev/null || {
 yay -S --noconfirm --needed --removemake noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-iosevkaterm-nerd
 
 FONT_VERSION=34.3.0
+FONT_SHA256=f5bcafa9ad0c0dc31245bac8283430525702b8e566ee5afe7c428747b58c9118
 
 install_custom_iosevka() {
   local temp_dir
@@ -38,6 +39,9 @@ install_custom_iosevka() {
 
   mkdir -p "$HOME/.local/share/fonts"
   curl -fL "$font_url" -o "$temp_dir/IosevkaCustom.zip"
+
+  echo "$FONT_SHA256  $temp_dir/IosevkaCustom.zip" | sha256sum --check --quiet
+
   unzip -q "$temp_dir/IosevkaCustom.zip" -d "$temp_dir"
   mv "$temp_dir/IosevkaCustom.ttc" "$font_path"
 
