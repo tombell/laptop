@@ -3,12 +3,7 @@ set -euo pipefail
 
 echo "==> Installing fonts…"
 
-command -v yay >/dev/null || {
-  echo "yay is required to install font packages" >&2
-  exit 1
-}
-
-yay -S --noconfirm --needed --removemake noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-iosevkaterm-nerd
+install_aur_package noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-iosevkaterm-nerd
 
 FONT_VERSION=34.3.0
 FONT_SHA256=f5bcafa9ad0c0dc31245bac8283430525702b8e566ee5afe7c428747b58c9118
@@ -22,15 +17,9 @@ install_custom_iosevka() {
     return
   fi
 
-  command -v curl >/dev/null || {
-    echo "curl is required to download custom Iosevka" >&2
-    exit 1
-  }
+  require_command curl "download custom Iosevka"
 
-  command -v unzip >/dev/null || {
-    echo "unzip is required to extract custom Iosevka" >&2
-    exit 1
-  }
+  require_command unzip "extract custom Iosevka"
 
   temp_dir="$(mktemp -d)"
   trap 'rm -rf "$temp_dir"' RETURN

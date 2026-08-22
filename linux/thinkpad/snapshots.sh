@@ -3,17 +3,9 @@ set -euo pipefail
 
 echo "==> Setting up btrfs snapshots…"
 
-command -v yay >/dev/null || {
-  echo "yay is required to install snapshot packages" >&2
-  exit 1
-}
+install_aur_package snap-pac
 
-yay -S --noconfirm --needed --removemake snap-pac
-
-command -v snapper >/dev/null || {
-  echo "snapper is required to configure btrfs snapshots" >&2
-  exit 1
-}
+require_command snapper "configure btrfs snapshots"
 
 if ! sudo snapper list-configs 2>/dev/null | grep -q "root"; then
   sudo snapper -c root create-config /

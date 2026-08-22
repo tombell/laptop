@@ -17,6 +17,11 @@ require_command() {
   }
 }
 
+install_aur_package() {
+  require_command yay "install AUR packages"
+  yay -S --noconfirm --needed --removemake "$@"
+}
+
 ensure_dotfiles() {
   if [ ! -d "$HOME/.dotfiles" ]; then
     require_command git "clone dotfiles"

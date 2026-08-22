@@ -7,10 +7,7 @@ if ! command -v yay &>/dev/null; then
   install_yay() {
     local temp_dir
 
-    command -v git >/dev/null || {
-      echo "git is required to install yay" >&2
-      exit 1
-    }
+    require_command git "clone and build yay"
 
     temp_dir="$(mktemp -d)"
     trap 'rm -rf "$temp_dir"' RETURN

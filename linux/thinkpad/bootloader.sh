@@ -4,10 +4,7 @@ set -euo pipefail
 echo "==> Setting up limine bootloader…"
 
 if [ ! -f "/etc/default/limine" ]; then
-  command -v blkid >/dev/null || {
-    echo "blkid is required to detect the encrypted root partition" >&2
-    exit 1
-  }
+  require_command blkid "detect the encrypted root partition"
 
   partuuids=()
   while IFS= read -r partuuid; do
@@ -67,12 +64,7 @@ term_background_bright: 24283b
 EOF
 fi
 
-command -v yay >/dev/null || {
-  echo "yay is required to install bootloader packages" >&2
-  exit 1
-}
-
-yay -S --noconfirm --needed --removemake limine-tool
+install_aur_package limine-tool
 
 command -v limine-install >/dev/null || {
   echo "limine-install is required to install the bootloader" >&2
