@@ -33,7 +33,6 @@ if [personal, work, agent].include? hostname
   brew 'herdr'
   brew 'jj'
   brew 'jq'
-  brew 'libyaml'
   brew 'mas'
   brew 'mise'
   brew 'tombell/formulae/tendr', args: ['HEAD']
@@ -67,6 +66,7 @@ end
 if [work].include? hostname
   brew 'cloudflared'
   brew 'libpq'
+  brew 'libyaml'
   brew 'mailpit'
   brew 'postgresql@18'
   brew 'railway'
