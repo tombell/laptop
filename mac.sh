@@ -16,12 +16,6 @@ work)
   ssh_keys=(Personal Work)
   restart_ssh_agent=true
   ;;
-server)
-  echo "==> Setting up macOS server…"
-  dotfile_tags=(server macos personal)
-  ssh_keys=(Personal)
-  restart_ssh_agent=false
-  ;;
 *)
   echo "Usage: $0 personal|work|server" >&2
   exit 1
