@@ -3,10 +3,19 @@
 Setup scripts for my personal and work Macs, Arch Linux ThinkPad, T2 MacBook Air,
 and Debian Raspberry Pi.
 
-## Usage
+## First run
 
-Choose the script for the machine and run it as your regular user. Linux setup
-requires Bash and sudo access. The scripts configure an existing OS installation.
+Start with an installed OS, internet access, Git, and sudo access. Linux profiles
+also require Bash. On a fresh Mac, `xcode-select --install` provides Git through
+the Command Line Tools.
+
+```sh
+git clone https://github.com/tombell/laptop.git ~/.laptop
+cd ~/.laptop
+```
+
+If the repo already exists, use that checkout. Choose one script and run it as
+your regular user:
 
 | Machine | Command |
 | --- | --- |
@@ -16,14 +25,29 @@ requires Bash and sudo access. The scripts configure an existing OS installation
 | T2 MacBook Air with Arch Linux | `./macbook.sh` |
 | Raspberry Pi with Debian or Raspberry Pi OS | `./rpi.sh` |
 
-The macOS wrappers call `./mac.sh personal` or `./mac.sh work`.
-Each Linux script selects its own distro and machine configuration.
+The macOS and Arch profiles install 1Password CLI and call `op signin`. Set up
+your CLI account before running, or configure it after the first sign-in failure
+and rerun the profile. See [dotfiles and SSH keys](#dotfiles-and-ssh-keys) for the
+required vault items.
+
+## Changes to expect
+
+These scripts apply my settings and can overwrite local configuration. Review the
+chosen profile before running it.
+
+- Both Arch profiles run a full system upgrade and install AUR packages through yay.
+- ThinkPad setup installs Hyprland and enables automatic desktop login as `tombell`.
+- MacBook setup replaces the EFI fallback bootloader with Limine after building its boot images.
+- macOS and Arch setup change the login shell to fish and export SSH private keys to disk.
+
+Reruns keep existing SSH keys and clone dotfiles only when missing. Configuration
+steps still run, and Arch still performs a system upgrade.
 
 ## macOS
 
-Both profiles install Homebrew and the packages in `macos/Brewfile`, set fish as
-the login shell, apply macOS defaults, install mise tools, and add the Herdr JJ
-Status plugin. The Brewfile selects some packages using the Mac's ComputerName.
+Both profiles install the packages in `macos/Brewfile`, apply macOS defaults,
+install mise tools, and add the Herdr JJ Status plugin. Homebrew is installed
+when missing. The Brewfile selects some packages using the Mac's ComputerName.
 
 The personal profile applies the `macos` and `personal` dotfile tags and installs
 the `Personal` SSH key. The work profile applies `macos` and `work`, installs both
@@ -31,66 +55,118 @@ the `Personal` SSH key. The work profile applies `macos` and `work`, installs bo
 
 ## ThinkPad
 
-The ThinkPad profile updates Arch, installs yay, and installs shared packages
-plus the ThinkPad additions. It configures Limine, Plymouth, Snapper, fonts,
-GNOME Keyring, fish, GTK settings, and mise tools. It also applies the `linux`
-dotfile tag and installs the `Personal` SSH key through 1Password CLI.
+The ThinkPad profile configures Limine, Plymouth, Snapper, fonts, GNOME Keyring,
+GTK settings, and mise tools. It applies the `linux` dotfile tag and installs the
+`Personal` SSH key.
 
-The boot configuration assumes AMD graphics and an encrypted Btrfs root using
-the mkinitcpio `encrypt` hook. The profile installs Hyprland and enables greetd
-with automatic login as `tombell` through uwsm.
+Its boot configuration assumes AMD graphics and an encrypted Btrfs root using
+the mkinitcpio `encrypt` hook. greetd starts Hyprland through uwsm.
 
 ## T2 MacBook Air
 
-Run this profile on an existing T2 Arch installation with:
+The MacBook profile requires:
 
-- UEFI boot and a `linux-t2` kernel that provides the `t2bce` drivers.
+- UEFI boot and a `linux-t2` kernel with the `t2bce` drivers.
 - A FAT EFI system partition mounted at `/boot`.
 - Btrfs subvolume `@` mounted at `/` directly inside LUKS, without LVM.
-- A separate Btrfs subvolume mounted at `/home` for its Snapper configuration.
+- A separate Btrfs subvolume mounted at `/home` for Snapper.
 - Working T2 firmware, networking, audio, and fan configuration.
 
-The profile installs shared packages plus the MacBook additions for a
-terminal-only system. It applies the `linux` dotfile tag, installs the `Personal`
-SSH key through 1Password CLI, and configures Snapper, fish, and mise tools.
+It installs terminal-only packages, applies the `linux` dotfile tag, installs the
+`Personal` SSH key, and configures Snapper and mise tools.
 
 Boot setup uses mkinitcpio with the T2 keyboard drivers, the existing console
-keymap, and `sd-encrypt`. It detects the root volume's LUKS UUID and configures
-Limine to build unified kernel images with the T2 kernel parameters.
+keymap, and `sd-encrypt`. It detects the LUKS UUID and builds Limine unified kernel
+images with the T2 kernel parameters. Limine's package hooks maintain the EFI
+loader on updates.
 
-Before replacing the EFI fallback loader, the script saves an existing GRUB
-loader from `/boot/EFI/BOOT/BOOTX64.EFI` to `/boot/EFI/GRUB/BOOTX64.EFI` and adds
-a GRUB recovery entry. It builds the boot images before installing Limine at
-`/boot/EFI/BOOT/BOOTX64.EFI`, then enables automatic EFI loader updates.
+The profile overwrites `/etc/default/limine`,
+`/etc/mkinitcpio.conf.d/10-t2-encryption.conf`, and `/etc/modules-load.d/t2.conf`.
+It saves existing Limine defaults once as `/etc/default/limine.pre-macbook`.
+Check other mkinitcpio drop-ins for settings that could override this configuration.
 
-The profile writes these configuration files on each run:
+When an existing GRUB fallback loader and configuration are present, the script
+saves the loader at `/boot/EFI/GRUB/BOOTX64.EFI` and adds a GRUB recovery menu entry.
+Keep GRUB until Limine has booted successfully. The script leaves rebooting to you.
 
-- `/etc/default/limine`
-- `/etc/mkinitcpio.conf.d/10-t2-encryption.conf`
-- `/etc/modules-load.d/t2.conf`
-
-It saves an existing Limine defaults file once as
-`/etc/default/limine.pre-macbook`. Review other mkinitcpio drop-ins before running,
-since they can override the generated settings.
-
-The script leaves rebooting to you. Verify a Limine boot before removing GRUB.
-For recovery from the live ISO, mount the EFI partition and copy its saved
-`EFI/GRUB/BOOTX64.EFI` back to `EFI/BOOT/BOOTX64.EFI`.
-
-The MacBook script and Limine boot still need a hardware test. Snapper setup
-creates root and home configurations; adding snapshot entries to Limine requires
-separate snapshot synchronization tooling.
+The MacBook script and Limine boot still need a hardware test. Snapper configures
+root and home snapshots; generating Limine snapshot entries requires separate
+tooling.
 
 ## Raspberry Pi
 
-The Pi profile installs git and rcm with apt before cloning and applying the base
-dotfiles. It uses no dotfile tags and leaves desktop, shell, and SSH key setup to
-you.
+The Pi installs git and rcm with apt, then clones and applies the base dotfiles
+without tags. It does not change the shell or install SSH keys.
+
+## Verify setup
+
+Open a new login session. On macOS and Arch, check the shell, sudo access, and
+HTTPS connectivity:
+
+```sh
+echo "$SHELL"
+sudo -v
+curl --fail --head https://github.com
+```
+
+The shell should end in `/fish`. On the Pi, check that your expected base dotfiles
+were installed instead.
+
+For the MacBook, reboot, select the internal EFI boot entry, and confirm that
+Limine appears, the built-in keyboard unlocks LUKS, and your user can log in.
+Then run:
+
+```sh
+uname -r
+findmnt /
+findmnt /home
+findmnt /boot
+sudo cryptsetup status cryptroot
+nmcli general status
+sudo snapper list-configs
+```
+
+Expect a T2 kernel, Btrfs subvolumes `@` and `@home`, a FAT `/boot`, an active LUKS
+mapping, working networking, and Snapper configurations named `root` and `home`.
+
+## Restore GRUB on the MacBook
+
+If Limine cannot boot, start the T2 live ISO and open a root Bash shell. Identify
+the internal EFI partition:
+
+```sh
+lsblk -o NAME,SIZE,FSTYPE,PARTLABEL,MOUNTPOINTS
+```
+
+The commands below use `/dev/nvme0n1p1`, the EFI partition in the two-partition
+MacBook layout. Confirm it is the internal FAT partition and is unmounted, or
+replace the device path. This restores the saved EFI loader; it requires the
+existing GRUB configuration and kernel files to remain intact.
+
+```bash
+(
+  set -e
+  mkdir -p /mnt/esp
+  mount /dev/nvme0n1p1 /mnt/esp
+  test -s /mnt/esp/EFI/GRUB/BOOTX64.EFI
+  cp /mnt/esp/EFI/GRUB/BOOTX64.EFI /mnt/esp/EFI/BOOT/BOOTX64.EFI
+  sync
+  umount /mnt/esp
+)
+```
+
+After the commands succeed, reboot and select the internal EFI boot entry.
+Once back in the installed system, stop Limine's update hooks from replacing the
+restored loader while you investigate:
+
+```sh
+sudo sed -i 's/^ENABLE_LIMINE_FALLBACK=yes$/ENABLE_LIMINE_FALLBACK=no/' /etc/default/limine
+```
 
 ## Package lists
 
 Arch packages live under `linux/arch/packages/`. Each directory contains
-`pacman.txt` and `aur.txt`, with one package name per line.
+`pacman.txt` and `aur.txt`, with one package name per line:
 
 | Directory | Contents |
 | --- | --- |
@@ -98,52 +174,37 @@ Arch packages live under `linux/arch/packages/`. Each directory contains
 | `thinkpad/` | ThinkPad additions, including the desktop |
 | `macbook/` | MacBook additions for encrypted T2 boot |
 
-Add a package to `common/` when both machines need it. Otherwise, add it to the
-machine's directory. Empty lists are allowed for machine additions.
+Put shared packages in `common/` and other packages in the machine's directory.
+Machine additions can be empty. The loader combines both lists and removes
+duplicate names. Direct use of the package helper defaults to ThinkPad.
 
-Both Arch scripts select their package profile explicitly. The package helper
-combines the shared and machine lists, removes duplicate names, and reads both
-package sources before starting installation. Direct use of the helper defaults
-to the ThinkPad profile.
-
-The Pi uses `linux/debian/packages/apt.txt`.
-macOS packages live in `macos/Brewfile`.
+The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
+Shared Linux configuration lives in `linux/shared/`, with boot and login setup
+under `linux/thinkpad/` and `linux/macbook/`. The MacBook reuses the ThinkPad
+Snapper script.
 
 ## Dotfiles and SSH keys
 
 The scripts clone [tombell/dotfiles](https://github.com/tombell/dotfiles) into
-`~/.dotfiles` when it is missing, then apply the selected tags with rcm.
+`~/.dotfiles` when missing, then apply the profile's tags with rcm.
 
-The macOS and Arch profiles sign in to 1Password CLI. Their SSH keys come from
-the `Personal` vault, using items named `Personal` or `Work` with `public key` and
-`private key` fields. Have your 1Password CLI account configured before running.
-Existing SSH key files are kept.
+SSH keys come from the `Personal` vault in 1Password. Items named `Personal` and
+`Work` must contain `public key` and `private key` fields. Only the work macOS
+profile needs the `Work` item.
 
-## Script layout
-
-| Directory | Purpose |
-| --- | --- |
-| `common/` | Bootstrap, dotfiles, SSH, mise, and Herdr helpers |
-| `macos/` | Homebrew, shell, and macOS defaults |
-| `linux/shared/` | Font, GUI, keyring, and shell configuration |
-| `linux/arch/` | pacman, yay, and Arch package lists |
-| `linux/debian/` | apt setup and the Pi package list |
-| `linux/macbook/` | T2 encrypted-boot configuration |
-| `linux/thinkpad/` | ThinkPad boot and login setup, plus Snapper setup reused by the MacBook |
-
-## Rerunning
-
-Package installation skips installed packages where supported, and dotfiles are
-cloned only when missing. Configuration steps can overwrite local settings.
-The Arch profiles also update the system on each run.
+The helper exports private keys to `~/.ssh/Personal` or `~/.ssh/Work` with mode
+`600`, and public keys to the corresponding `.pub` files with mode `644`.
+These are local key files, not references to the 1Password SSH agent. Existing
+files are kept, so rerunning does not refresh a rotated key.
 
 ## Checks
 
-Run ShellCheck and Bash's syntax checker from the repository root:
+Run from the repository root:
 
 ```sh
 find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec shellcheck {} +
 find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec bash -n {} \;
 ```
 
-These checks do not run the setup scripts or test booting the installed system.
+These check shell syntax and lint. Use the verification steps above to check an
+installed system.
