@@ -1,0 +1,9 @@
+btrfs-progs
+cryptsetup
+dosfstools
+efibootmgr
+intel-ucode
+limine
+mkinitcpio
+snapper
+systemd-ukify

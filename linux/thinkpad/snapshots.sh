@@ -3,13 +3,6 @@ set -euo pipefail
 
 echo "==> Setting up btrfs snapshots…"
 
-command -v yay >/dev/null || {
-  echo "yay is required to install snapshot packages" >&2
-  exit 1
-}
-
-yay -S --noconfirm --needed --removemake snap-pac
-
 command -v snapper >/dev/null || {
   echo "snapper is required to configure btrfs snapshots" >&2
   exit 1
