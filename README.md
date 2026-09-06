@@ -96,7 +96,9 @@ tooling.
 ## Raspberry Pi
 
 The Pi installs git and rcm with apt, then clones and applies the base dotfiles
-without tags. It does not change the shell or install SSH keys.
+without tags, excluding `config/nvim`. It does not change the shell or install
+SSH keys. The exclusion skips future installs; it does not remove existing
+Neovim files or links.
 
 ## Verify setup
 

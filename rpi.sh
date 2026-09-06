@@ -9,5 +9,5 @@ source "$ROOT_DIR/common/rcm.sh"
 source "$ROOT_DIR/linux/debian/packages.sh"
 
 ensure_dotfiles
-# Install only base dotfiles, without profile tags or forwarded arguments.
-setup_dotfiles --
+# Install base dotfiles without Neovim configuration.
+setup_dotfiles -- -x config/nvim
