@@ -1,0 +1,4 @@
+1password-cli
+limine-tool
+neovim-git
+rcm

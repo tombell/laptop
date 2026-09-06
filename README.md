@@ -9,6 +9,7 @@ Scripts for setting up my personal/work macOS laptops, macOS server, Arch Linux 
 ./work.sh
 ./server.sh
 ./thinkpad.sh
+./macbook.sh
 ./rpi.sh
 ```
 
@@ -93,18 +94,46 @@ Assumes Arch Linux.
 - Installs the `Personal` SSH key
 - Configures bootloader, snapshots, fonts, greetd, shell, GUI settings, and mise tools
 
+### MacBook Air Linux
+
+Run `./macbook.sh` as your regular user on an existing T2 Arch installation.
+Requires `sudo`, `linux-t2` with the `t2bce` drivers, UEFI boot, a FAT EFI
+partition mounted at `/boot`, and Btrfs subvolume `@` mounted at `/` directly
+inside LUKS. This is post-install configuration; it does not partition disks.
+
+- Uses separate terminal-only package manifests under `linux/arch/packages/macbook/`
+- Keeps the installed T2 kernel, firmware, networking, audio, and fan configuration
+- Configures mkinitcpio with T2 keyboard drivers and `sd-encrypt`, preserving the console keymap
+- Configures Limine with UKIs and the encrypted-root and T2 kernel parameters
+- Saves the existing GRUB EFI loader as `/boot/EFI/GRUB/BOOTX64.EFI` and adds a recovery menu entry
+- Builds boot images before installing Limine at `/boot/EFI/BOOT/BOOTX64.EFI`
+- Enables Limine's package hooks to maintain the EFI fallback loader on updates
+- Reuses the Btrfs root/home Snapper configuration, Linux dotfiles, 1Password CLI SSH setup, fish, and mise
+- Does not install a desktop, display manager, Plymouth, or graphical keyring
+
+The profile manages `/etc/default/limine` and
+`/etc/mkinitcpio.conf.d/10-t2-encryption.conf`. An existing Limine defaults file
+is saved once as `/etc/default/limine.pre-macbook`. Review any other local
+mkinitcpio drop-ins before running. Run from a normal login session, with
+1Password CLI sign-in available. The script neither reboots nor removes GRUB.
+Verify a Limine boot before removing GRUB. From the live ISO, its saved EFI
+loader can also be copied back to `EFI/BOOT/BOOTX64.EFI` on the mounted ESP.
+Snapper configuration does not add snapshot entries to Limine; that requires
+separate snapshot synchronization tooling.
+
 ## Script layout
 
 - `common/`: cross-platform dotfiles, SSH, mise, and bootstrap helpers
 - `linux/shared/`: distro-agnostic configuration for fonts, GUI settings, keyring, and shell; no package installation
 - `linux/arch/`: pacman configuration, AUR helper, and Arch package manifests
 - `linux/debian/`: apt package installation and Debian package manifest
+- `linux/macbook/`: T2 MacBook encrypted-boot configuration
 - `linux/thinkpad/`: machine-specific bootloader, snapshots, and login-manager configuration
 
 `thinkpad.sh` and `rpi.sh` explicitly select their distro setup and configuration.
 Shared scripts are opt-in: the headless Pi does not run desktop or shell configuration.
-Package manifests supply prerequisites before configuration scripts run. Arch manifests
-currently describe the ThinkPad; Debian's manifest contains only the Pi's dotfile prerequisites.
+Package manifests supply prerequisites before configuration scripts run. Default Arch manifests
+describe the ThinkPad; the `macbook` manifests select terminal-only packages; Debian's manifest contains only the Pi's dotfile prerequisites.
 The Pi keeps untagged dotfiles, while the ThinkPad uses the `linux` tag.
 
 ## Assumptions
@@ -115,7 +144,7 @@ The Pi keeps untagged dotfiles, while the ThinkPad uses the `linux` tag.
   - `public key`
   - `private key`
 - macOS package selection is controlled by hostname in `macos/Brewfile`
-- Linux entrypoints target the ThinkPad Arch install and the Debian Raspberry Pi; they do not auto-detect distributions
+- Linux entrypoints target the ThinkPad and T2 MacBook Arch installs and the Debian Raspberry Pi; they do not auto-detect distributions
 
 ## Re-running
 
