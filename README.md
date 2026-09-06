@@ -86,8 +86,8 @@ Assumes Arch Linux.
 - Configures pacman and updates the system
 - Installs `yay`
 - Installs packages from:
-  - `linux/arch/packages/pacman.txt`
-  - `linux/arch/packages/aur.txt`
+  - `linux/arch/packages/common/{pacman,aur}.txt`
+  - `linux/arch/packages/thinkpad/{pacman,aur}.txt`
 - Clones dotfiles if needed
 - Runs `rcup` with the `linux` tag
 - Signs in to 1Password CLI
@@ -101,7 +101,7 @@ Requires `sudo`, `linux-t2` with the `t2bce` drivers, UEFI boot, a FAT EFI
 partition mounted at `/boot`, and Btrfs subvolume `@` mounted at `/` directly
 inside LUKS. This is post-install configuration; it does not partition disks.
 
-- Uses separate terminal-only package manifests under `linux/arch/packages/macbook/`
+- Combines shared packages from `linux/arch/packages/common/` with terminal-only additions from `linux/arch/packages/macbook/`
 - Keeps the installed T2 kernel, firmware, networking, audio, and fan configuration
 - Configures mkinitcpio with T2 keyboard drivers and `sd-encrypt`, preserving the console keymap
 - Configures Limine with UKIs and the encrypted-root and T2 kernel parameters
@@ -132,8 +132,12 @@ separate snapshot synchronization tooling.
 
 `thinkpad.sh` and `rpi.sh` explicitly select their distro setup and configuration.
 Shared scripts are opt-in: the headless Pi does not run desktop or shell configuration.
-Package manifests supply prerequisites before configuration scripts run. Default Arch manifests
-describe the ThinkPad; the `macbook` manifests select terminal-only packages; Debian's manifest contains only the Pi's dotfile prerequisites.
+Package manifests supply prerequisites before configuration scripts run. Arch profiles
+combine `common/` with either `thinkpad/` or `macbook/`, removing duplicate package
+names before installation. Both entrypoints explicitly select their profile; the
+package helper defaults to ThinkPad when used directly. Add packages used by both
+machines to `common/` and machine-specific additions to the matching profile.
+Debian's manifest contains only the Pi's dotfile prerequisites.
 The Pi keeps untagged dotfiles, while the ThinkPad uses the `linux` tag.
 
 ## Assumptions

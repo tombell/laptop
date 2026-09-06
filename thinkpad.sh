@@ -9,7 +9,7 @@ source "$ROOT_DIR/common/ssh.sh"
 
 source "$ROOT_DIR/linux/arch/pacman.sh"
 source "$ROOT_DIR/linux/arch/aur.sh"
-source "$ROOT_DIR/linux/arch/packages.sh"
+ARCH_PACKAGE_PROFILE=thinkpad source "$ROOT_DIR/linux/arch/packages.sh"
 source "$ROOT_DIR/linux/shared/keyring.sh"
 
 ensure_dotfiles
