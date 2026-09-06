@@ -1,155 +1,149 @@
 # laptop
 
-Scripts for setting up my personal/work macOS laptops, macOS server, Arch Linux ThinkPad, and Raspberry Pi.
+Setup scripts for my personal and work Macs, Arch Linux ThinkPad, T2 MacBook Air,
+and Debian Raspberry Pi.
 
 ## Usage
 
-```sh
-./personal.sh
-./work.sh
-./server.sh
-./thinkpad.sh
-./macbook.sh
-./rpi.sh
-```
+Choose the script for the machine and run it as your regular user. Linux setup
+requires Bash and sudo access. The scripts configure an existing OS installation.
 
-The macOS wrappers delegate to the profile-aware entrypoint:
+| Machine | Command |
+| --- | --- |
+| Personal Mac | `./personal.sh` |
+| Work Mac | `./work.sh` |
+| ThinkPad with Arch Linux | `./thinkpad.sh` |
+| T2 MacBook Air with Arch Linux | `./macbook.sh` |
+| Raspberry Pi with Debian or Raspberry Pi OS | `./rpi.sh` |
 
-```sh
-./mac.sh personal
-./mac.sh work
-./mac.sh server
-```
+The macOS wrappers call `./mac.sh personal` or `./mac.sh work`.
+Each Linux script selects its own distro and machine configuration.
+
+## macOS
+
+Both profiles install Homebrew and the packages in `macos/Brewfile`, set fish as
+the login shell, apply macOS defaults, install mise tools, and add the Herdr JJ
+Status plugin. The Brewfile selects some packages using the Mac's ComputerName.
+
+The personal profile applies the `macos` and `personal` dotfile tags and installs
+the `Personal` SSH key. The work profile applies `macos` and `work`, installs both
+`Personal` and `Work` keys, and stops the existing ssh-agent process.
+
+## ThinkPad
+
+The ThinkPad profile updates Arch, installs yay, and installs shared packages
+plus the ThinkPad additions. It configures Limine, Plymouth, Snapper, fonts,
+GNOME Keyring, fish, GTK settings, and mise tools. It also applies the `linux`
+dotfile tag and installs the `Personal` SSH key through 1Password CLI.
+
+The boot configuration assumes AMD graphics and an encrypted Btrfs root using
+the mkinitcpio `encrypt` hook. The profile installs Hyprland and enables greetd
+with automatic login as `tombell` through uwsm.
+
+## T2 MacBook Air
+
+Run this profile on an existing T2 Arch installation with:
+
+- UEFI boot and a `linux-t2` kernel that provides the `t2bce` drivers.
+- A FAT EFI system partition mounted at `/boot`.
+- Btrfs subvolume `@` mounted at `/` directly inside LUKS, without LVM.
+- A separate Btrfs subvolume mounted at `/home` for its Snapper configuration.
+- Working T2 firmware, networking, audio, and fan configuration.
+
+The profile installs shared packages plus the MacBook additions for a
+terminal-only system. It applies the `linux` dotfile tag, installs the `Personal`
+SSH key through 1Password CLI, and configures Snapper, fish, and mise tools.
+
+Boot setup uses mkinitcpio with the T2 keyboard drivers, the existing console
+keymap, and `sd-encrypt`. It detects the root volume's LUKS UUID and configures
+Limine to build unified kernel images with the T2 kernel parameters.
+
+Before replacing the EFI fallback loader, the script saves an existing GRUB
+loader from `/boot/EFI/BOOT/BOOTX64.EFI` to `/boot/EFI/GRUB/BOOTX64.EFI` and adds
+a GRUB recovery entry. It builds the boot images before installing Limine at
+`/boot/EFI/BOOT/BOOTX64.EFI`, then enables automatic EFI loader updates.
+
+The profile writes these configuration files on each run:
+
+- `/etc/default/limine`
+- `/etc/mkinitcpio.conf.d/10-t2-encryption.conf`
+- `/etc/modules-load.d/t2.conf`
+
+It saves an existing Limine defaults file once as
+`/etc/default/limine.pre-macbook`. Review other mkinitcpio drop-ins before running,
+since they can override the generated settings.
+
+The script leaves rebooting to you. Verify a Limine boot before removing GRUB.
+For recovery from the live ISO, mount the EFI partition and copy its saved
+`EFI/GRUB/BOOTX64.EFI` back to `EFI/BOOT/BOOTX64.EFI`.
+
+The MacBook script and Limine boot still need a hardware test. Snapper setup
+creates root and home configurations; adding snapshot entries to Limine requires
+separate snapshot synchronization tooling.
+
+## Raspberry Pi
+
+The Pi profile installs git and rcm with apt before cloning and applying the base
+dotfiles. It uses no dotfile tags and leaves desktop, shell, and SSH key setup to
+you.
+
+## Package lists
+
+Arch packages live under `linux/arch/packages/`. Each directory contains
+`pacman.txt` and `aur.txt`, with one package name per line.
+
+| Directory | Contents |
+| --- | --- |
+| `common/` | Packages used by both Arch machines |
+| `thinkpad/` | ThinkPad additions, including the desktop |
+| `macbook/` | MacBook additions for encrypted T2 boot |
+
+Add a package to `common/` when both machines need it. Otherwise, add it to the
+machine's directory. Empty lists are allowed for machine additions.
+
+Both Arch scripts select their package profile explicitly. The package helper
+combines the shared and machine lists, removes duplicate names, and reads both
+package sources before starting installation. Direct use of the helper defaults
+to the ThinkPad profile.
+
+The Pi uses `linux/debian/packages/apt.txt`.
+macOS packages live in `macos/Brewfile`.
+
+## Dotfiles and SSH keys
+
+The scripts clone [tombell/dotfiles](https://github.com/tombell/dotfiles) into
+`~/.dotfiles` when it is missing, then apply the selected tags with rcm.
+
+The macOS and Arch profiles sign in to 1Password CLI. Their SSH keys come from
+the `Personal` vault, using items named `Personal` or `Work` with `public key` and
+`private key` fields. Have your 1Password CLI account configured before running.
+Existing SSH key files are kept.
+
+## Script layout
+
+| Directory | Purpose |
+| --- | --- |
+| `common/` | Bootstrap, dotfiles, SSH, mise, and Herdr helpers |
+| `macos/` | Homebrew, shell, and macOS defaults |
+| `linux/shared/` | Font, GUI, keyring, and shell configuration |
+| `linux/arch/` | pacman, yay, and Arch package lists |
+| `linux/debian/` | apt setup and the Pi package list |
+| `linux/macbook/` | T2 encrypted-boot configuration |
+| `linux/thinkpad/` | ThinkPad boot and login setup, plus Snapper setup reused by the MacBook |
+
+## Rerunning
+
+Package installation skips installed packages where supported, and dotfiles are
+cloned only when missing. Configuration steps can overwrite local settings.
+The Arch profiles also update the system on each run.
 
 ## Checks
 
-Run ShellCheck and Bash's syntax checker directly:
+Run ShellCheck and Bash's syntax checker from the repository root:
 
 ```sh
 find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec shellcheck {} +
 find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec bash -n {} \;
 ```
 
-## What each profile does
-
-### Personal macOS
-
-- Installs Homebrew if needed
-- Installs packages from `macos/Brewfile`
-- Sets Homebrew's `fish` as the user shell
-- Installs Herdr Navigator v0.3.5 and Herdr JJ Status
-- Clones `https://github.com/tombell/dotfiles.git` into `~/.dotfiles` if needed
-- Runs `rcup` with `macos` and `personal` tags
-- Signs in to 1Password CLI
-- Installs the `Personal` SSH key
-- Applies macOS defaults
-- Installs mise tools
-
-### Work macOS
-
-- Installs Homebrew if needed
-- Installs packages from `macos/Brewfile`
-- Sets Homebrew's `fish` as the user shell
-- Installs Herdr Navigator v0.3.5 and Herdr JJ Status
-- Clones dotfiles if needed
-- Runs `rcup` with `macos` and `work` tags
-- Signs in to 1Password CLI
-- Installs the `Personal` and `Work` SSH keys
-- Restarts `ssh-agent`
-- Applies macOS defaults
-- Installs mise tools
-
-### macOS Server
-
-- Installs Homebrew if needed
-- Installs packages from `macos/Brewfile`
-- Sets Homebrew's `fish` as the user shell
-- Clones dotfiles if needed
-- Runs `rcup` with `macos`, `personal`, and `server` tags
-- Signs in to 1Password CLI
-- Installs the `Personal` SSH key
-- Applies macOS defaults
-- Installs mise tools
-
-### Raspberry Pi
-
-Assumes Debian (including Raspberry Pi OS), with `sudo` available.
-
-- Updates apt package indexes and installs `git` and `rcm` from `linux/debian/packages/apt.txt`
-- Clones dotfiles if needed
-- Runs `rcup` with no tags to install the base dotfiles
-
-### ThinkPad Linux
-
-Assumes Arch Linux.
-
-- Configures pacman and updates the system
-- Installs `yay`
-- Installs packages from:
-  - `linux/arch/packages/common/{pacman,aur}.txt`
-  - `linux/arch/packages/thinkpad/{pacman,aur}.txt`
-- Clones dotfiles if needed
-- Runs `rcup` with the `linux` tag
-- Signs in to 1Password CLI
-- Installs the `Personal` SSH key
-- Configures bootloader, snapshots, fonts, greetd, shell, GUI settings, and mise tools
-
-### MacBook Air Linux
-
-Run `./macbook.sh` as your regular user on an existing T2 Arch installation.
-Requires `sudo`, `linux-t2` with the `t2bce` drivers, UEFI boot, a FAT EFI
-partition mounted at `/boot`, and Btrfs subvolume `@` mounted at `/` directly
-inside LUKS. This is post-install configuration; it does not partition disks.
-
-- Combines shared packages from `linux/arch/packages/common/` with terminal-only additions from `linux/arch/packages/macbook/`
-- Keeps the installed T2 kernel, firmware, networking, audio, and fan configuration
-- Configures mkinitcpio with T2 keyboard drivers and `sd-encrypt`, preserving the console keymap
-- Configures Limine with UKIs and the encrypted-root and T2 kernel parameters
-- Saves the existing GRUB EFI loader as `/boot/EFI/GRUB/BOOTX64.EFI` and adds a recovery menu entry
-- Builds boot images before installing Limine at `/boot/EFI/BOOT/BOOTX64.EFI`
-- Enables Limine's package hooks to maintain the EFI fallback loader on updates
-- Reuses the Btrfs root/home Snapper configuration, Linux dotfiles, 1Password CLI SSH setup, fish, and mise
-- Does not install a desktop, display manager, Plymouth, or graphical keyring
-
-The profile manages `/etc/default/limine` and
-`/etc/mkinitcpio.conf.d/10-t2-encryption.conf`. An existing Limine defaults file
-is saved once as `/etc/default/limine.pre-macbook`. Review any other local
-mkinitcpio drop-ins before running. Run from a normal login session, with
-1Password CLI sign-in available. The script neither reboots nor removes GRUB.
-Verify a Limine boot before removing GRUB. From the live ISO, its saved EFI
-loader can also be copied back to `EFI/BOOT/BOOTX64.EFI` on the mounted ESP.
-Snapper configuration does not add snapshot entries to Limine; that requires
-separate snapshot synchronization tooling.
-
-## Script layout
-
-- `common/`: cross-platform dotfiles, SSH, mise, and bootstrap helpers
-- `linux/shared/`: distro-agnostic configuration for fonts, GUI settings, keyring, and shell; no package installation
-- `linux/arch/`: pacman configuration, AUR helper, and Arch package manifests
-- `linux/debian/`: apt package installation and Debian package manifest
-- `linux/macbook/`: T2 MacBook encrypted-boot configuration
-- `linux/thinkpad/`: machine-specific bootloader, snapshots, and login-manager configuration
-
-`thinkpad.sh` and `rpi.sh` explicitly select their distro setup and configuration.
-Shared scripts are opt-in: the headless Pi does not run desktop or shell configuration.
-Package manifests supply prerequisites before configuration scripts run. Arch profiles
-combine `common/` with either `thinkpad/` or `macbook/`, removing duplicate package
-names before installation. Both entrypoints explicitly select their profile; the
-package helper defaults to ThinkPad when used directly. Add packages used by both
-machines to `common/` and machine-specific additions to the matching profile.
-Debian's manifest contains only the Pi's dotfile prerequisites.
-The Pi keeps untagged dotfiles, while the ThinkPad uses the `linux` tag.
-
-## Assumptions
-
-- Dotfiles live at `https://github.com/tombell/dotfiles.git`
-- 1Password CLI is available before SSH keys are configured
-- SSH keys are stored in 1Password items named after the key, with fields:
-  - `public key`
-  - `private key`
-- macOS package selection is controlled by hostname in `macos/Brewfile`
-- Linux entrypoints target the ThinkPad and T2 MacBook Arch installs and the Debian Raspberry Pi; they do not auto-detect distributions
-
-## Re-running
-
-The scripts are intended to be safe to rerun. Package installs use `--needed` where available, dotfiles are cloned only when missing, and SSH keys are only written when the target files do not already exist.
+These checks do not run the setup scripts or test booting the installed system.
