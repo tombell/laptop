@@ -25,8 +25,8 @@ The macOS wrappers delegate to the profile-aware entrypoint:
 Run ShellCheck and Bash's syntax checker directly:
 
 ```sh
-shellcheck {,common/,linux/,linux/thinkpad/,macos/}*.sh
-bash -n {,common/,linux/,linux/thinkpad/,macos/}*.sh
+find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec shellcheck {} +
+find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec bash -n {} \;
 ```
 
 ## What each profile does
@@ -72,6 +72,9 @@ bash -n {,common/,linux/,linux/thinkpad/,macos/}*.sh
 
 ### Raspberry Pi
 
+Assumes Debian (including Raspberry Pi OS), with `sudo` available.
+
+- Updates apt package indexes and installs `git` and `rcm` from `linux/debian/packages/apt.txt`
 - Clones dotfiles if needed
 - Runs `rcup` with no tags to install the base dotfiles
 
@@ -82,13 +85,27 @@ Assumes Arch Linux.
 - Configures pacman and updates the system
 - Installs `yay`
 - Installs packages from:
-  - `linux/packages/pacman.txt`
-  - `linux/packages/aur.txt`
+  - `linux/arch/packages/pacman.txt`
+  - `linux/arch/packages/aur.txt`
 - Clones dotfiles if needed
 - Runs `rcup` with the `linux` tag
 - Signs in to 1Password CLI
 - Installs the `Personal` SSH key
 - Configures bootloader, snapshots, fonts, greetd, shell, GUI settings, and mise tools
+
+## Script layout
+
+- `common/`: cross-platform dotfiles, SSH, mise, and bootstrap helpers
+- `linux/shared/`: distro-agnostic configuration for fonts, GUI settings, keyring, and shell; no package installation
+- `linux/arch/`: pacman configuration, AUR helper, and Arch package manifests
+- `linux/debian/`: apt package installation and Debian package manifest
+- `linux/thinkpad/`: machine-specific bootloader, snapshots, and login-manager configuration
+
+`thinkpad.sh` and `rpi.sh` explicitly select their distro setup and configuration.
+Shared scripts are opt-in: the headless Pi does not run desktop or shell configuration.
+Package manifests supply prerequisites before configuration scripts run. Arch manifests
+currently describe the ThinkPad; Debian's manifest contains only the Pi's dotfile prerequisites.
+The Pi keeps untagged dotfiles, while the ThinkPad uses the `linux` tag.
 
 ## Assumptions
 
@@ -98,7 +115,7 @@ Assumes Arch Linux.
   - `public key`
   - `private key`
 - macOS package selection is controlled by hostname in `macos/Brewfile`
-- Linux setup is intended for the ThinkPad Arch install, not a generic Linux machine
+- Linux entrypoints target the ThinkPad Arch install and the Debian Raspberry Pi; they do not auto-detect distributions
 
 ## Re-running
 

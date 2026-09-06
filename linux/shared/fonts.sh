@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Installing fonts…"
-
-command -v yay >/dev/null || {
-  echo "yay is required to install font packages" >&2
-  exit 1
-}
-
-yay -S --noconfirm --needed --removemake noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-iosevkaterm-nerd
+echo "==> Installing custom Iosevka font…"
 
 FONT_VERSION=34.3.0
 

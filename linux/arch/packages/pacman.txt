@@ -5,6 +5,7 @@ btop
 fastfetch
 fd
 ffmpeg
+fish
 fzf
 ghostty
 git
@@ -25,12 +26,17 @@ less
 libyaml
 man-db
 mise
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
 openssh
 polkit-gnome
 plymouth
 qt6ct
 quickshell
 ripgrep
+snap-pac
+ttf-iosevkaterm-nerd
 unzip
 usage
 uwsm

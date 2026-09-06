@@ -67,13 +67,6 @@ term_background_bright: 24283b
 EOF
 fi
 
-command -v yay >/dev/null || {
-  echo "yay is required to install bootloader packages" >&2
-  exit 1
-}
-
-yay -S --noconfirm --needed --removemake limine-tool
-
 command -v limine-install >/dev/null || {
   echo "limine-install is required to install the bootloader" >&2
   exit 1

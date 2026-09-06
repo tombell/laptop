@@ -6,5 +6,8 @@ setup_laptop_root
 
 source "$ROOT_DIR/common/rcm.sh"
 
+source "$ROOT_DIR/linux/debian/packages.sh"
+
 ensure_dotfiles
-setup_dotfiles
+# Install only base dotfiles, without profile tags or forwarded arguments.
+setup_dotfiles --
