@@ -21,13 +21,14 @@ machine as your regular user:
 | --- | --- |
 | Personal Mac | `./personal.sh` |
 | Work Mac | `./work.sh` |
-| ThinkPad with Arch Linux | `./thinkpad.sh` |
-| T2 MacBook Air with Arch Linux | `./macbook.sh` |
+| ThinkPad with Arch Linux | `./thinkpad.sh`, then `./arch-user.sh` |
+| T2 MacBook Air with Arch Linux | `./macbook.sh`, then `./arch-user.sh` |
 | Raspberry Pi with Debian or Raspberry Pi OS | `./rpi.sh` |
 
-The macOS and Arch scripts install 1Password CLI and call `op signin`. Configure
-your CLI account first. If sign-in fails, configure the account and rerun the
-script. See [dotfiles and SSH keys](#dotfiles-and-ssh-keys) for the vault items.
+macOS and Arch OS setup install 1Password CLI. The macOS scripts and Arch user
+setup call `op signin` to export SSH keys. Configure your CLI account before that
+step. If sign-in fails, configure the account and rerun the relevant script. See
+[dotfiles and SSH keys](#dotfiles-and-ssh-keys) for the vault items.
 
 ## Changes to expect
 
@@ -37,10 +38,11 @@ the script for your machine before running it.
 - Arch setup upgrades the system and installs AUR packages through yay.
 - Both Arch machines use Hyprland with automatic desktop login as `tombell`.
 - MacBook setup replaces the EFI fallback bootloader with Limine after building its boot images.
-- macOS and Arch setup change the login shell to fish and export SSH private keys to disk.
+- macOS setup and Arch user setup change the login shell to fish and export SSH private keys to disk.
 
-Reruns keep existing SSH keys and dotfiles checkouts, but reapply configuration
-and upgrade Arch packages.
+Reruns keep existing SSH keys and dotfiles checkouts, but reapply configuration.
+Arch OS setup upgrades packages on each run. Arch user setup leaves system
+packages, boot, snapshots, networking, and greetd alone.
 
 ## macOS
 
@@ -54,13 +56,33 @@ Personal setup applies the `macos` and `personal` dotfile tags and installs the
 
 ## Arch Linux
 
-Both machines use the same desktop, fonts, GNOME Keyring, GTK settings, Snapper,
-and mise tools. They apply the `linux` dotfile tag and install the `Personal` SSH
-key. greetd starts Hyprland through uwsm.
+Run OS setup once when preparing a machine, then rerun user setup whenever you
+want to apply your configuration.
 
-Setup runs in this order: packages, bootloader, snapshots, services, dotfiles,
-desktop, SSH keys, fish, then mise. The MacBook checks its boot prerequisites
-before installing packages and enables T2 fan control with the other services.
+| Phase | Command | What it does |
+| --- | --- | --- |
+| ThinkPad OS setup | `./thinkpad.sh` | Packages, bootloader, snapshots, networking, zram, system services, and greetd |
+| MacBook OS setup | `./macbook.sh` | The same OS setup with T2 boot and fan control |
+| User configuration on either machine | `./arch-user.sh` | Dotfiles, fonts, GNOME Keyring, GTK preferences, PipeWire, SSH keys, fish, and mise |
+
+Run both phases as your regular user. OS setup uses sudo where needed. User
+setup needs a running systemd user session, such as a desktop, TTY, or SSH login.
+It assumes OS setup has installed the required packages.
+
+Both OS scripts configure packages, boot, snapshots, and system services in that
+order. The MacBook checks its boot prerequisites before installing packages.
+greetd starts Hyprland through uwsm and logs in as `tombell`. Finish user setup
+before rebooting into the desktop.
+
+For routine configuration updates on either machine:
+
+```sh
+./arch-user.sh
+```
+
+User setup applies the `linux` dotfile tag and installs the `Personal` SSH key.
+It skips 1Password sign-in when both key files already exist. It can still prompt
+when changing your login shell to fish. mise installs the configured user tools.
 
 ### ThinkPad
 
@@ -101,12 +123,12 @@ but adding them to the Limine menu needs separate tooling.
 
 ### Networking and services
 
-Both scripts run `linux/arch/system.sh` to configure networking, zram, Bluetooth,
-power profiles, and PipeWire. MacBook setup also enables `t2fanrd` and keeps its
-existing fan configuration.
+Both OS scripts run `linux/arch/system.sh` to configure networking, zram,
+Bluetooth, power profiles, and greetd. MacBook setup also enables `t2fanrd` and
+keeps its existing fan configuration.
 
-To rerun the shared service setup after installing packages, use a systemd
-login session as your regular user. An SSH session works:
+To rerun shared system service setup after installing packages, run as your
+regular user with sudo access:
 
 ```sh
 bash linux/arch/system.sh
@@ -131,9 +153,9 @@ that use a different device. A systemd service drop-in disables zswap before
 zram0 starts. Setup also disables zswap if zram0 is already active, without
 stopping or resizing swap.
 
-Setup enables Bluetooth and power-profiles-daemon for the system. It enables the
+OS setup enables Bluetooth and power-profiles-daemon. User setup enables the
 PipeWire and PulseAudio compatibility sockets and WirePlumber for the current
-user. Services start immediately.
+user. These services start immediately.
 
 Verify with:
 
@@ -215,10 +237,10 @@ The MacBook list includes `intel-ucode` and `systemd-ukify`. Ukify builds its
 unified kernel images; the machine boot script chooses the initramfs hooks.
 
 The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
-Shared Linux configuration, including the desktop and login manager, lives in
-`linux/shared/`. Shared Arch system setup, including Snapper, lives in
-`linux/arch/`. Machine-specific boot setup remains under `linux/thinkpad/` and
-`linux/macbook/`, alongside the MacBook fan service setup.
+Shared Linux user configuration lives in `linux/shared/`. Shared Arch system
+setup, including Snapper and greetd, lives in `linux/arch/`. Machine-specific
+boot setup remains under `linux/thinkpad/` and `linux/macbook/`, alongside the
+MacBook fan service setup.
 
 ## Dotfiles and SSH keys
 
