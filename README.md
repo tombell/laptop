@@ -250,8 +250,5 @@ find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec she
 find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec bash -n {} \;
 ```
 
-Run the isolated service-setup checks with `python3 -m unittest discover -s tests -v`.
-They use temporary files and mocked system commands; they do not change the host.
-
 The shell checks cover syntax and lint. Use the verification steps above to check an
 installed system.
