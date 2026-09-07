@@ -14,7 +14,7 @@ source "$ROOT_DIR/linux/arch/aur.sh"
 ARCH_PACKAGE_PROFILE=macbook source "$ROOT_DIR/linux/arch/packages.sh"
 
 install_macbook_bootloader
-source "$ROOT_DIR/linux/thinkpad/snapshots.sh"
+source "$ROOT_DIR/linux/arch/snapshots.sh"
 source "$ROOT_DIR/linux/arch/system.sh"
 source "$ROOT_DIR/linux/macbook/services.sh"
 
