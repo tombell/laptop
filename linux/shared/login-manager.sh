@@ -19,3 +19,4 @@ EOF
 fi
 
 sudo systemctl enable greetd.service
+sudo systemctl set-default graphical.target

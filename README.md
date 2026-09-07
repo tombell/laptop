@@ -1,105 +1,128 @@
 # laptop
 
-Scripts for setting up my personal/work macOS laptops, macOS server, Arch Linux ThinkPad, and Raspberry Pi.
+Setup scripts for my personal and work Macs, Arch Linux ThinkPad,
+and Debian Raspberry Pi.
 
-## Usage
+## First run
 
-```sh
-./personal.sh
-./work.sh
-./server.sh
-./thinkpad.sh
-./rpi.sh
-```
-
-The macOS wrappers delegate to the profile-aware entrypoint:
+Start with an installed OS, internet access, Git, and sudo access. Linux profiles
+also require Bash. On a fresh Mac, `xcode-select --install` provides Git through
+the Command Line Tools.
 
 ```sh
-./mac.sh personal
-./mac.sh work
-./mac.sh server
+git clone https://github.com/tombell/laptop.git ~/.laptop
+cd ~/.laptop
 ```
+
+If the repo already exists, use that checkout. Choose one script and run it as
+your regular user:
+
+| Machine | Command |
+| --- | --- |
+| Personal Mac | `./personal.sh` |
+| Work Mac | `./work.sh` |
+| ThinkPad with Arch Linux | `./thinkpad.sh` |
+| Raspberry Pi with Debian or Raspberry Pi OS | `./rpi.sh` |
+
+The macOS and Arch profiles install 1Password CLI and call `op signin`. Set up
+your CLI account before running, or configure it after the first sign-in failure
+and rerun the profile. See [dotfiles and SSH keys](#dotfiles-and-ssh-keys) for the
+required vault items.
+
+## Changes to expect
+
+These scripts apply my settings and can overwrite local configuration. Review the
+chosen profile before running it.
+
+- The Arch profile runs a full system upgrade and installs AUR packages through yay.
+- The ThinkPad profile installs Hyprland and enables automatic desktop login as `tombell`.
+- macOS and Arch setup change the login shell to fish and export SSH private keys to disk.
+
+Reruns keep existing SSH keys and clone dotfiles only when missing. Configuration
+steps still run, and Arch still performs a system upgrade.
+
+## macOS
+
+Both profiles install the packages in `macos/Brewfile`, apply macOS defaults,
+install mise tools, and add the Herdr JJ Status plugin. Homebrew is installed
+when missing. The Brewfile selects some packages using the Mac's ComputerName.
+
+The personal profile applies the `macos` and `personal` dotfile tags and installs
+the `Personal` SSH key. The work profile applies `macos` and `work`, installs both
+`Personal` and `Work` keys, and stops the existing ssh-agent process.
+
+## ThinkPad
+
+The ThinkPad profile configures Limine, Plymouth, Snapper, fonts, GNOME Keyring,
+GTK settings, and mise tools. It applies the `linux` dotfile tag and installs the
+`Personal` SSH key.
+
+Its boot configuration assumes AMD graphics and an encrypted Btrfs root using
+the mkinitcpio `encrypt` hook. greetd starts Hyprland through uwsm.
+
+## Raspberry Pi
+
+The Pi installs git and rcm with apt, then clones and applies the base dotfiles
+without tags, excluding `config/nvim`. It does not change the shell or install
+SSH keys. The exclusion skips future installs; it does not remove existing
+Neovim files or links.
+
+## Verify setup
+
+Open a new login session. On macOS and Arch, check the shell, sudo access, and
+HTTPS connectivity:
+
+```sh
+echo "$SHELL"
+sudo -v
+curl --fail --head https://github.com
+```
+
+The shell should end in `/fish`. On the Pi, check that your expected base dotfiles
+were installed instead.
+
+## Package lists
+
+Arch packages live under `linux/arch/packages/`. Each directory contains
+`pacman.txt` and `aur.txt`, with one package name per line:
+
+| Directory | Contents |
+| --- | --- |
+| `common/` | Shared Arch command-line packages |
+| `desktop/` | Hyprland, greetd, fonts, and desktop applications |
+| `thinkpad/` | ThinkPad additions, including Plymouth |
+
+Put shared command-line packages in `common/`, desktop packages in `desktop/`,
+and hardware-specific packages in the machine's directory. Machine additions
+can be empty. The loader combines all three sets and removes
+duplicate names. Direct use of the package helper defaults to ThinkPad.
+
+The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
+Shared Linux configuration, including the desktop and login manager, lives in
+`linux/shared/`, with boot and snapshot setup under `linux/thinkpad/`.
+
+## Dotfiles and SSH keys
+
+The scripts clone [tombell/dotfiles](https://github.com/tombell/dotfiles) into
+`~/.dotfiles` when missing, then apply the profile's tags with rcm.
+
+SSH keys come from the `Personal` vault in 1Password. Items named `Personal` and
+`Work` must contain `public key` and `private key` fields. Only the work macOS
+profile needs the `Work` item.
+
+The helper exports private keys to `~/.ssh/Personal` or `~/.ssh/Work` with mode
+`600`, and public keys to the corresponding `.pub` files with mode `644`.
+These are local key files, not references to the 1Password SSH agent. Existing
+files are kept, so rerunning does not refresh a rotated key.
 
 ## Checks
 
-Run ShellCheck and Bash's syntax checker directly:
+Run from the repository root:
 
 ```sh
-shellcheck {,common/,linux/,linux/thinkpad/,macos/}*.sh
-bash -n {,common/,linux/,linux/thinkpad/,macos/}*.sh
+find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec shellcheck {} +
+find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec bash -n {} \;
 ```
 
-## What each profile does
-
-### Personal macOS
-
-- Installs Homebrew if needed
-- Installs packages from `macos/Brewfile`
-- Sets Homebrew's `fish` as the user shell
-- Installs Herdr Navigator v0.3.5 and Herdr JJ Status
-- Clones `https://github.com/tombell/dotfiles.git` into `~/.dotfiles` if needed
-- Runs `rcup` with `macos` and `personal` tags
-- Signs in to 1Password CLI
-- Installs the `Personal` SSH key
-- Applies macOS defaults
-- Installs mise tools
-
-### Work macOS
-
-- Installs Homebrew if needed
-- Installs packages from `macos/Brewfile`
-- Sets Homebrew's `fish` as the user shell
-- Installs Herdr Navigator v0.3.5 and Herdr JJ Status
-- Clones dotfiles if needed
-- Runs `rcup` with `macos` and `work` tags
-- Signs in to 1Password CLI
-- Installs the `Personal` and `Work` SSH keys
-- Restarts `ssh-agent`
-- Applies macOS defaults
-- Installs mise tools
-
-### macOS Server
-
-- Installs Homebrew if needed
-- Installs packages from `macos/Brewfile`
-- Sets Homebrew's `fish` as the user shell
-- Clones dotfiles if needed
-- Runs `rcup` with `macos`, `personal`, and `server` tags
-- Signs in to 1Password CLI
-- Installs the `Personal` SSH key
-- Applies macOS defaults
-- Installs mise tools
-
-### Raspberry Pi
-
-- Clones dotfiles if needed
-- Runs `rcup` with no tags to install the base dotfiles
-
-### ThinkPad Linux
-
-Assumes Arch Linux.
-
-- Configures pacman and updates the system
-- Installs `yay`
-- Installs packages from:
-  - `linux/packages/pacman.txt`
-  - `linux/packages/aur.txt`
-- Clones dotfiles if needed
-- Runs `rcup` with the `linux` tag
-- Signs in to 1Password CLI
-- Installs the `Personal` SSH key
-- Configures bootloader, snapshots, fonts, greetd, shell, GUI settings, and mise tools
-
-## Assumptions
-
-- Dotfiles live at `https://github.com/tombell/dotfiles.git`
-- 1Password CLI is available before SSH keys are configured
-- SSH keys are stored in 1Password items named after the key, with fields:
-  - `public key`
-  - `private key`
-- macOS package selection is controlled by hostname in `macos/Brewfile`
-- Linux setup is intended for the ThinkPad Arch install, not a generic Linux machine
-
-## Re-running
-
-The scripts are intended to be safe to rerun. Package installs use `--needed` where available, dotfiles are cloned only when missing, and SSH keys are only written when the target files do not already exist.
+These check shell syntax and lint. Use the verification steps above to check an
+installed system.
