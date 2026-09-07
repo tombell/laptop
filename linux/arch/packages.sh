@@ -6,7 +6,7 @@ package_dir="$LAPTOP_ROOT/linux/arch/packages"
 package_profile="${ARCH_PACKAGE_PROFILE:-thinkpad}"
 
 case "$package_profile" in
-thinkpad) ;;
+thinkpad | macbook) ;;
 *)
   echo "Unknown Arch package profile: $package_profile" >&2
   exit 1

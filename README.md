@@ -1,6 +1,6 @@
 # laptop
 
-Setup scripts for my personal and work Macs, Arch Linux ThinkPad,
+Setup scripts for my personal and work Macs, Arch Linux ThinkPad, T2 MacBook Air,
 and Debian Raspberry Pi.
 
 ## First run
@@ -22,6 +22,7 @@ your regular user:
 | Personal Mac | `./personal.sh` |
 | Work Mac | `./work.sh` |
 | ThinkPad with Arch Linux | `./thinkpad.sh` |
+| T2 MacBook Air with Arch Linux | `./macbook.sh` |
 | Raspberry Pi with Debian or Raspberry Pi OS | `./rpi.sh` |
 
 The macOS and Arch profiles install 1Password CLI and call `op signin`. Set up
@@ -34,8 +35,9 @@ required vault items.
 These scripts apply my settings and can overwrite local configuration. Review the
 chosen profile before running it.
 
-- The Arch profile runs a full system upgrade and installs AUR packages through yay.
-- The ThinkPad profile installs Hyprland and enables automatic desktop login as `tombell`.
+- Both Arch profiles run a full system upgrade and install AUR packages through yay.
+- Both Arch profiles install Hyprland and enables automatic desktop login as `tombell`.
+- MacBook setup replaces the EFI fallback bootloader with Limine after building its boot images.
 - macOS and Arch setup change the login shell to fish and export SSH private keys to disk.
 
 Reruns keep existing SSH keys and clone dotfiles only when missing. Configuration
@@ -60,6 +62,42 @@ GTK settings, and mise tools. It applies the `linux` dotfile tag and installs th
 Its boot configuration assumes AMD graphics and an encrypted Btrfs root using
 the mkinitcpio `encrypt` hook. greetd starts Hyprland through uwsm.
 
+## T2 MacBook Air
+
+The MacBook profile requires:
+
+- UEFI boot and an installed `linux-t2` kernel with the `t2bce` drivers.
+- The `arch-mact2` repository configured for T2 kernel, firmware, and support packages.
+- A FAT EFI system partition mounted at `/boot`.
+- Btrfs subvolume `@` mounted at `/` directly inside LUKS, without LVM.
+- A separate Btrfs subvolume mounted at `/home` for Snapper.
+- Working T2 firmware, networking, audio, and fan configuration.
+
+It installs the same Hyprland desktop, greetd automatic login, fonts, GNOME
+Keyring, and GTK settings as the ThinkPad. It applies the `linux` dotfile tag,
+installs the `Personal` SSH key, and configures Snapper and mise tools.
+
+The manifest maintains `linux-t2`, Apple wireless firmware, T2 audio profiles,
+and `t2fanrd`. The initial kernel and working networking must already be present
+so preflight checks and package downloads can run.
+
+Boot setup uses mkinitcpio with the T2 keyboard drivers, the existing console
+keymap, and `sd-encrypt`. It detects the LUKS UUID and builds Limine unified kernel
+images with the T2 kernel parameters. Limine's package hooks maintain the EFI
+loader on updates.
+
+The profile overwrites `/etc/default/limine`,
+`/etc/mkinitcpio.conf.d/10-t2-encryption.conf`, and `/etc/modules-load.d/t2.conf`.
+It saves existing Limine defaults once as `/etc/default/limine.pre-macbook`.
+Check other mkinitcpio drop-ins for settings that could override this configuration.
+
+The script builds the boot images before installing Limine as the EFI fallback
+loader. It leaves rebooting to you.
+
+The MacBook script and Limine boot still need a hardware test. Snapper configures
+root and home snapshots; generating Limine snapshot entries requires separate
+tooling.
+
 ## Raspberry Pi
 
 The Pi installs git and rcm with apt, then clones and applies the base dotfiles
@@ -81,6 +119,23 @@ curl --fail --head https://github.com
 The shell should end in `/fish`. On the Pi, check that your expected base dotfiles
 were installed instead.
 
+For the MacBook, reboot, select the internal EFI boot entry, and confirm that
+Limine appears, the built-in keyboard unlocks LUKS, and your user can log in.
+Then run:
+
+```sh
+uname -r
+findmnt /
+findmnt /home
+findmnt /boot
+sudo cryptsetup status cryptroot
+nmcli general status
+sudo snapper list-configs
+```
+
+Expect a T2 kernel, Btrfs subvolumes `@` and `@home`, a FAT `/boot`, an active LUKS
+mapping, working networking, and Snapper configurations named `root` and `home`.
+
 ## Package lists
 
 Arch packages live under `linux/arch/packages/`. Each directory contains
@@ -95,8 +150,9 @@ upower # Battery status service consumed by the Quickshell bar.
 | Directory | Contents |
 | --- | --- |
 | `common/` | Shared system, networking, audio, and command-line packages |
-| `desktop/` | Hyprland, greetd, fonts, and desktop applications |
+| `desktop/` | Hyprland, greetd, fonts, and desktop applications for both Arch machines |
 | `thinkpad/` | ThinkPad additions, including Plymouth |
+| `macbook/` | MacBook additions for encrypted T2 boot |
 
 Put shared system services and command-line packages in `common/`, desktop
 applications and appearance packages in `desktop/`, and hardware-specific
@@ -106,12 +162,17 @@ package name. The loader strips comments and blank lines, combines all three
 sets, and removes duplicate names before installation. Direct use of the package
 helper defaults to ThinkPad.
 
-Limine, mkinitcpio, LUKS tools, and EFI partition tools live in `common/`.
-The ThinkPad boot script retains its BusyBox initramfs with `udev` and `encrypt`.
+Both Arch profiles share Limine, mkinitcpio, LUKS tools, and EFI partition tools.
+Their initramfs configuration stays in the machine boot scripts: the ThinkPad
+uses BusyBox with `udev` and `encrypt`, while the MacBook uses `systemd` and
+`sd-encrypt` with the T2 drivers. `intel-ucode` and `systemd-ukify` remain in the
+MacBook manifest. Ukify is the MacBook's current UKI builder choice; it does not
+select the initramfs runtime.
 
 The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
 Shared Linux configuration, including the desktop and login manager, lives in
-`linux/shared/`, with boot and snapshot setup under `linux/thinkpad/`.
+`linux/shared/`, with boot setup under `linux/thinkpad/` and `linux/macbook/`. The MacBook reuses the ThinkPad
+Snapper script.
 
 ## Dotfiles and SSH keys
 
