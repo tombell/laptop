@@ -14,16 +14,16 @@ git clone https://github.com/tombell/laptop.git ~/.laptop
 cd ~/.laptop
 ```
 
-Use the existing checkout if you already have one. Run the script for your
-machine as your regular user:
+Use the existing checkout if you already have one. Run `./setup --help` to list
+the commands, or choose one below. Run setup as your regular user:
 
 | Machine | Command |
 | --- | --- |
-| Personal Mac | `./personal.sh` |
-| Work Mac | `./work.sh` |
-| ThinkPad with Arch Linux | `./thinkpad.sh`, then `./arch-user.sh` |
-| T2 MacBook Air with Arch Linux | `./macbook.sh`, then `./arch-user.sh` |
-| Raspberry Pi with Debian or Raspberry Pi OS | `./rpi.sh` |
+| Personal Mac | `./setup macos personal` |
+| Work Mac | `./setup macos work` |
+| ThinkPad with Arch Linux | `./setup arch os thinkpad`, then `./setup arch user` |
+| T2 MacBook Air with Arch Linux | `./setup arch os macbook`, then `./setup arch user` |
+| Raspberry Pi with Debian or Raspberry Pi OS | `./setup debian rpi` |
 
 macOS and Arch OS setup install 1Password CLI. The macOS scripts and Arch user
 setup call `op signin` to export SSH keys. Configure your CLI account before that
@@ -58,20 +58,20 @@ Personal setup applies the `macos` and `personal` dotfile tags and installs the
 
 ## Arch Linux
 
-Run OS setup once when preparing a machine, then rerun user setup whenever you
+Run OS setup when preparing a machine, then rerun user setup whenever you
 want to apply your configuration.
 
 | Phase | Command | What it does |
 | --- | --- | --- |
-| ThinkPad OS setup | `./thinkpad.sh` | Packages, bootloader, snapshots, networking, zram, system services, and greetd |
-| MacBook OS setup | `./macbook.sh` | The same OS setup with T2 boot and fan control |
-| User configuration on either machine | `./arch-user.sh` | Dotfiles, fonts, GNOME Keyring, GTK preferences, PipeWire, SSH keys, fish, and mise |
+| ThinkPad OS setup | `./setup arch os thinkpad` | Packages, bootloader, snapshots, networking, zram, system services, and greetd |
+| MacBook OS setup | `./setup arch os macbook` | The same OS setup with T2 boot and fan control |
+| User configuration on either machine | `./setup arch user` | Dotfiles, fonts, GNOME Keyring, GTK preferences, PipeWire, SSH keys, fish, and mise |
 
 Run both phases as your regular user. OS setup uses sudo where needed. User
 setup needs a running systemd user session, such as a desktop, TTY, or SSH login.
 It assumes OS setup has installed the required packages.
 
-Both OS scripts configure packages, boot, snapshots, and system services in that
+Both OS profiles configure packages, boot, snapshots, and system services in that
 order. The MacBook checks its boot prerequisites before installing packages.
 greetd starts Hyprland through uwsm and logs in as `tombell`. Finish user setup
 before rebooting into the desktop.
@@ -79,7 +79,7 @@ before rebooting into the desktop.
 For routine configuration updates on either machine:
 
 ```sh
-./arch-user.sh
+./setup arch user
 ```
 
 User setup applies the `linux` dotfile tag and installs the `Personal` SSH key.
@@ -239,6 +239,9 @@ The MacBook list includes `intel-ucode` and `systemd-ukify`. Ukify builds its
 unified kernel images; the machine boot script chooses the initramfs hooks.
 
 The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
+
+`setup` dispatches commands to the entry points in `profiles/arch/`,
+`profiles/macos.sh`, and `profiles/rpi.sh`.
 Shared Linux user configuration lives in `linux/shared/`. Shared Arch system
 setup, including Snapper and greetd, lives in `linux/arch/`. Machine-specific
 boot setup remains under `linux/thinkpad/` and `linux/macbook/`, alongside the
@@ -263,8 +266,8 @@ replace them separately after rotating a key.
 Run from the repository root:
 
 ```sh
-find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec shellcheck {} +
-find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec bash -n {} \;
+find . -type f \( -name '*.sh' -o -name setup \) -not -path './.git/*' -not -path './.jj/*' -exec shellcheck {} +
+find . -type f \( -name '*.sh' -o -name setup \) -not -path './.git/*' -not -path './.jj/*' -exec bash -n {} \;
 ```
 
 These checks cover shell syntax and lint. Use the verification commands above
