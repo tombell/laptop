@@ -36,7 +36,7 @@ These scripts apply my settings and can overwrite local configuration. Review th
 chosen profile before running it.
 
 - Both Arch profiles run a full system upgrade and install AUR packages through yay.
-- Both Arch profiles install Hyprland and enables automatic desktop login as `tombell`.
+- Both Arch profiles install Hyprland and enable automatic desktop login as `tombell`.
 - MacBook setup replaces the EFI fallback bootloader with Limine after building its boot images.
 - macOS and Arch setup change the login shell to fish and export SSH private keys to disk.
 
@@ -71,7 +71,7 @@ The MacBook profile requires:
 - A FAT EFI system partition mounted at `/boot`.
 - Btrfs subvolume `@` mounted at `/` directly inside LUKS, without LVM.
 - A separate Btrfs subvolume mounted at `/home` for Snapper.
-- Working T2 firmware, networking, audio, and fan configuration.
+- Working networking for package downloads.
 
 It installs the same Hyprland desktop, greetd automatic login, fonts, GNOME
 Keyring, and GTK settings as the ThinkPad. It applies the `linux` dotfile tag,
@@ -94,9 +94,61 @@ Check other mkinitcpio drop-ins for settings that could override this configurat
 The script builds the boot images before installing Limine as the EFI fallback
 loader. It leaves rebooting to you.
 
-The MacBook script and Limine boot still need a hardware test. Snapper configures
+The boot setup has been tested on Mythra. Test boot and disk unlocking again
+after changing the kernel, initramfs, or disk layout. Snapper configures
 root and home snapshots; generating Limine snapshot entries requires separate
 tooling.
+
+## Arch networking and services
+
+Both Arch profiles run `linux/arch/system.sh` after installing their packages.
+It configures iwd, systemd-networkd, systemd-resolved, zram, Bluetooth, power
+profiles, and the current user's PipeWire services. The MacBook also enables
+`t2fanrd`, keeping any existing fan configuration.
+
+Run as your regular user in a systemd login session, including SSH. To reapply
+only this configuration after installing the packages:
+
+```sh
+bash linux/arch/system.sh
+```
+
+Networking uses DHCP, router-provided DNS, and mDNS on Wi-Fi and Ethernet.
+Ethernet routes have priority over Wi-Fi, followed by mobile broadband. Existing
+networkd configuration in `/etc`, `/run`, or `/usr/local/lib` is kept. If none
+exists, the scripts install default `.network` files. Existing Wi-Fi credentials
+in `/var/lib/iwd` are kept; use `iwctl` or Impala to join a new network.
+
+The helper assumes the machine already uses iwd for Wi-Fi authentication and
+systemd-networkd for IP configuration. Active network services are not restarted,
+and new network definitions
+apply when links next appear or after reboot. The resolver uses systemd-resolved's
+stub; an existing different `/etc/resolv.conf` is backed up once as
+`/etc/resolv.conf.pre-laptop`.
+
+Zram defaults to zstd compression with half the usable RAM, capped at 4 GiB.
+Existing generator configuration and masks are kept. A systemd service drop-in
+disables zswap before zram0 starts, and the helper applies that setting immediately
+if zram0 is already active. Reruns do not stop or resize active swap. Custom
+configuration that does not generate zram0 swap is left in place.
+
+Bluetooth and power-profiles-daemon are enabled as system services. PipeWire and
+its PulseAudio compatibility sockets, plus WirePlumber, are enabled for the user
+running setup. The services start immediately; no reboot is performed.
+
+Verify with:
+
+```sh
+systemctl is-active iwd systemd-networkd systemd-resolved bluetooth power-profiles-daemon
+systemctl --user is-active pipewire.socket pipewire-pulse.socket wireplumber
+networkctl status wlan0
+resolvectl query archlinux.org
+swapon --show
+zramctl
+```
+
+For the MacBook, also check `systemctl is-active t2fanrd`. Test audio output and
+the microphone from the desktop; an active service alone does not verify sound.
 
 ## Raspberry Pi
 
@@ -129,7 +181,8 @@ findmnt /
 findmnt /home
 findmnt /boot
 sudo cryptsetup status cryptroot
-nmcli general status
+networkctl status wlan0
+resolvectl status
 sudo snapper list-configs
 ```
 
@@ -197,5 +250,8 @@ find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec she
 find . -type f -name '*.sh' -not -path './.git/*' -not -path './.jj/*' -exec bash -n {} \;
 ```
 
-These check shell syntax and lint. Use the verification steps above to check an
+Run the isolated service-setup checks with `python3 -m unittest discover -s tests -v`.
+They use temporary files and mocked system commands; they do not change the host.
+
+The shell checks cover syntax and lint. Use the verification steps above to check an
 installed system.
