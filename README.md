@@ -224,8 +224,9 @@ select the initramfs runtime.
 
 The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
 Shared Linux configuration, including the desktop and login manager, lives in
-`linux/shared/`, with boot setup under `linux/thinkpad/` and `linux/macbook/`. The MacBook reuses the ThinkPad
-Snapper script.
+`linux/shared/`. Shared Arch system setup, including Snapper, lives in
+`linux/arch/`. Machine-specific boot setup remains under `linux/thinkpad/` and
+`linux/macbook/`, alongside the MacBook fan service setup.
 
 ## Dotfiles and SSH keys
 

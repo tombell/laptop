@@ -20,6 +20,6 @@ signin_1password
 setup_ssh_key "Personal" "Personal"
 
 source "$ROOT_DIR/linux/thinkpad/bootloader.sh"
-source "$ROOT_DIR/linux/thinkpad/snapshots.sh"
+source "$ROOT_DIR/linux/arch/snapshots.sh"
 source "$ROOT_DIR/linux/shared/shell.sh"
 source "$ROOT_DIR/common/mise.sh"
