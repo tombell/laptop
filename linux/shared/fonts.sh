@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Installing custom Iosevka font…"
+echo "==> Installing custom Iosevka font..."
 
 FONT_VERSION=34.3.0
 

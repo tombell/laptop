@@ -5,13 +5,13 @@ profile=${1:-}
 
 case "$profile" in
 personal)
-  echo "==> Setting up personal macOS laptop…"
+  echo "==> Setting up personal macOS laptop..."
   dotfile_tags=(macos personal)
   ssh_keys=(Personal)
   restart_ssh_agent=false
   ;;
 work)
-  echo "==> Setting up work macOS laptop…"
+  echo "==> Setting up work macOS laptop..."
   dotfile_tags=(macos work)
   ssh_keys=(Personal Work)
   restart_ssh_agent=true

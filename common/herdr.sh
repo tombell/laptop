@@ -14,7 +14,7 @@ install_herdr_plugin() {
     return
   fi
 
-  echo "==> Installing Herdr plugin ${plugin_id}…"
+  echo "==> Installing Herdr plugin ${plugin_id}..."
   herdr plugin install "$repository" "$@" --yes
 }
 

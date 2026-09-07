@@ -25,7 +25,7 @@ setup_dotfiles() {
     tag_args+=("-t" "$tag")
   done
 
-  echo "==> Setting up dotfiles with rcm…"
+  echo "==> Setting up dotfiles with rcm..."
 
   command -v rcup >/dev/null || {
     echo "rcup is required to set up dotfiles" >&2

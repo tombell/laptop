@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if ! command -v brew &>/dev/null; then
-  echo "==> Installing Homebrew…"
+  echo "==> Installing Homebrew..."
   command -v curl >/dev/null || {
     echo "curl is required to install Homebrew" >&2
     exit 1
@@ -25,5 +25,5 @@ command -v brew >/dev/null || {
 
 LAPTOP_ROOT="${LAPTOP_ROOT:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)}"
 
-echo "==> Installing Homebrew formulae and casks…"
+echo "==> Installing Homebrew formulae and casks..."
 brew bundle --file "$LAPTOP_ROOT/macos/Brewfile"

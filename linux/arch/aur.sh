@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Configuring makepkg…"
+echo "==> Configuring makepkg..."
 
 sudo sed -i '/^OPTIONS=(/s/\(^.*\s\)\(debug\)\(\s.*$\)/\1!debug\3/' /etc/makepkg.conf
 
@@ -26,6 +26,6 @@ if ! command -v yay &>/dev/null; then
     trap - RETURN
   }
 
-  echo "==> Installing yay AUR helper…"
+  echo "==> Installing yay AUR helper..."
   install_yay
 fi

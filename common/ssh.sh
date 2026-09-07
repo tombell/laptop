@@ -17,7 +17,7 @@ setup_ssh_key() {
   mkdir -p "$HOME/.ssh"
   chmod 700 "$HOME/.ssh"
 
-  echo "==> Setting up SSH keys for ${name}…"
+  echo "==> Setting up SSH keys for ${name}..."
 
   if [ ! -e "$public_key" ]; then
     temp_public_key="$(mktemp "${public_key}.XXXXXX")"

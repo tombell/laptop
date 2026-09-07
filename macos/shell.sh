@@ -22,12 +22,12 @@ if [ ! -x "$fish_shell" ]; then
 fi
 
 if ! grep -Fxq "$fish_shell" /etc/shells; then
-  echo "==> Adding Homebrew fish to /etc/shells…"
+  echo "==> Adding Homebrew fish to /etc/shells..."
   echo "$fish_shell" | sudo tee -a /etc/shells >/dev/null
 fi
 
 current_shell=$(dscl . -read "/Users/$USER" UserShell | awk '{print $2}')
 if [ "$current_shell" != "$fish_shell" ]; then
-  echo "==> Setting shell to Homebrew fish…"
+  echo "==> Setting shell to Homebrew fish..."
   chsh -s "$fish_shell"
 fi
