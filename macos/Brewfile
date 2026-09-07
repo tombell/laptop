@@ -75,7 +75,7 @@ if [work].include? hostname
   cask 'claude'
   cask 'claude-code@latest'
   cask 'linear'
-  cask 'mac-mouse-fix'
+  cask 'openlogi'
 end
 
 if [agent].include? hostname
