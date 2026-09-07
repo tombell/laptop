@@ -1,0 +1,6 @@
+apple-bcm-firmware # Apple Broadcom firmware for the built-in Wi-Fi and Bluetooth.
+apple-t2-audio-config # ALSA profiles for the T2 speakers, headphone port, and microphones.
+intel-ucode # Intel CPU microcode updates included in the MacBook boot images.
+linux-t2 # T2-enabled kernel and drivers for the MacBook.
+systemd-ukify # Build the unified kernel images used by the Limine setup.
+t2fanrd # Temperature-based fan control for the T2 MacBook.
