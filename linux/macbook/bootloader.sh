@@ -47,7 +47,7 @@ prepare_macbook_bootloader() {
     exit 1
   fi
 
-  echo "==> Preparing T2 encrypted boot…"
+  echo "==> Preparing T2 encrypted boot..."
   sudo install -d /etc/mkinitcpio.conf.d /etc/modules-load.d
   if [ -f /etc/default/limine ] && [ ! -f /etc/default/limine.pre-macbook ]; then
     sudo cp /etc/default/limine /etc/default/limine.pre-macbook
@@ -68,7 +68,7 @@ EOF
 }
 
 install_macbook_bootloader() {
-  echo "==> Building T2 Limine entries…"
+  echo "==> Building T2 Limine entries..."
   # Build successfully before replacing the working EFI fallback loader.
   sudo limine-mkinitcpio
   sudo limine-install --fallback

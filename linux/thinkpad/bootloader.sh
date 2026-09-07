@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Setting up limine bootloader…"
+echo "==> Setting up limine bootloader..."
 
 if [ ! -f "/etc/default/limine" ]; then
   command -v blkid >/dev/null || {
@@ -39,7 +39,7 @@ SNAPSHOT_FORMAT_CHOICE=5
 EOF
 fi
 
-echo "==> Configuring Plymouth…"
+echo "==> Configuring Plymouth..."
 if ! grep -Eq '^MODULES=.*\bamdgpu\b' /etc/mkinitcpio.conf; then
   sudo sed -Ei 's/^MODULES=\((.*)\)$/MODULES=(amdgpu \1)/' /etc/mkinitcpio.conf
 fi
@@ -77,8 +77,8 @@ command -v limine-mkinitcpio >/dev/null || {
   exit 1
 }
 
-echo "==> Installing Limine and registering its UEFI entry…"
+echo "==> Installing Limine and registering its UEFI entry..."
 sudo limine-install
 
-echo "==> Building Limine kernel entries…"
+echo "==> Building Limine kernel entries..."
 sudo limine-mkinitcpio

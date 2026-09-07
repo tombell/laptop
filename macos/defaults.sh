@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Setting macOS defaults…"
+echo "==> Setting macOS defaults..."
 
 ###############################################################################
 # APPEARANCE

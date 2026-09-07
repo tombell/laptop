@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Setting up btrfs snapshots…"
+echo "==> Setting up btrfs snapshots..."
 
 command -v snapper >/dev/null || {
   echo "snapper is required to configure btrfs snapshots" >&2
