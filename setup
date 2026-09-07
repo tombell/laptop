@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+setup_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  ./setup arch os thinkpad
+  ./setup arch os macbook
+  ./setup arch user
+  ./setup macos personal
+  ./setup macos work
+  ./setup debian rpi
+
+Run Arch OS setup first, then user configuration. Use arch user for routine reruns.
+EOF
+}
+
+case "$#:$*" in
+"0:"|"1:--help"|"1:-h")
+  usage
+  ;;
+"3:arch os thinkpad")
+  exec "$setup_dir/profiles/arch/thinkpad.sh"
+  ;;
+"3:arch os macbook")
+  exec "$setup_dir/profiles/arch/macbook.sh"
+  ;;
+"2:arch user")
+  exec "$setup_dir/profiles/arch/user.sh"
+  ;;
+"2:macos personal"|"2:macos work")
+  exec "$setup_dir/profiles/macos.sh" "$2"
+  ;;
+"2:debian rpi")
+  exec "$setup_dir/profiles/rpi.sh"
+  ;;
+*)
+  usage >&2
+  exit 2
+  ;;
+esac

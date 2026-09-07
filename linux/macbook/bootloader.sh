@@ -3,7 +3,7 @@ set -euo pipefail
 
 prepare_macbook_bootloader() {
   if [ "$EUID" -eq 0 ]; then
-    echo "Run macbook.sh as your regular user with sudo access." >&2
+    echo "Run setup arch os macbook as your regular user with sudo access." >&2
     exit 1
   fi
 

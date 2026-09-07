@@ -17,12 +17,12 @@ work)
   restart_ssh_agent=true
   ;;
 *)
-  echo "Usage: $0 personal|work|server" >&2
+  echo "Usage: $0 personal|work" >&2
   exit 1
   ;;
 esac
 
-source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/common/bootstrap.sh"
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)/common/bootstrap.sh"
 setup_laptop_root
 
 source "$ROOT_DIR/common/rcm.sh"

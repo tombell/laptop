@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/common/bootstrap.sh"
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)/common/bootstrap.sh"
 setup_laptop_root
 
 if [[ "$EUID" -eq 0 ]]; then
-  echo "Run arch-user.sh as your regular user." >&2
+  echo "Run setup arch user as your regular user." >&2
   exit 1
 fi
 systemctl --user show-environment >/dev/null || {
