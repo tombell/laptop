@@ -1,20 +1,41 @@
-bat
-btop
-fastfetch
-fd
-fish
-fzf
-git
-git-delta
-github-cli
-jujutsu
-less
-libyaml
-man-db
-mise
-openssh
-ripgrep
-snap-pac
-unzip
-usage
-zoxide
+bat # Syntax-highlighted file viewing; used by the fish cat alias.
+bluez # Bluetooth service for pairing and connecting devices.
+bluez-utils # Bluetooth command-line tools for pairing and troubleshooting.
+btop # Interactive CPU, memory, disk, and process monitoring.
+btrfs-progs # Btrfs filesystem tools for root and home snapshot setup on Arch.
+cryptsetup # Configure and unlock the LUKS-encrypted root filesystems.
+dosfstools # Check and maintain the FAT EFI system partitions.
+efibootmgr # Inspect and manage firmware EFI boot entries.
+fastfetch # Display system and hardware details in the terminal.
+fd # Fast file finding for command-line and editor workflows.
+fish # Login shell configured by the shared shell setup.
+fzf # Fuzzy selection for shell history, files, and command output.
+git # Clone and update laptop, dotfiles, and development repositories.
+git-delta # Readable syntax-highlighted Git diffs.
+github-cli # Manage GitHub repositories, issues, and pull requests from the terminal.
+gst-plugin-pipewire # Connect GStreamer applications to PipeWire.
+iwd # Wi-Fi authentication and saved-network connections, with networkd managing IP configuration.
+jujutsu # Manage development history with jj.
+less # Pager for command output, manual pages, and diffs.
+libyaml # Native YAML library for Ruby's Psych extension when building Ruby.
+limine # EFI bootloader used by both Arch profiles.
+linux-firmware # Firmware for the graphics, network, and other devices on Arch systems.
+man-db # Read and search locally installed manual pages.
+mise # Install and activate project language runtimes and development tools.
+mkinitcpio # Build initramfs and boot images using each machine's hooks and drivers.
+openssh # SSH client, key tools, and agent for remote hosts and Git access.
+pacman-contrib # Package maintenance tools including checkupdates, paccache, and pacdiff.
+pipewire # Shared audio server and media routing for the Arch desktop.
+pipewire-alsa # Route applications using ALSA through PipeWire.
+pipewire-audio # Audio devices, processing, and Bluetooth audio support for PipeWire.
+pipewire-jack # Provide JACK compatibility through PipeWire.
+pipewire-pulse # Provide PulseAudio compatibility through PipeWire.
+power-profiles-daemon # Power-profile service used by the Quickshell bar.
+ripgrep # Search source code and configuration from the terminal and editor.
+snap-pac # Create Snapper snapshots around pacman transactions.
+snapper # Configure and manage root and home Btrfs snapshots.
+unzip # Extract the custom Iosevka font archive during font setup.
+usage # Shell completion support for mise.
+wireplumber # Manage PipeWire devices, streams, and audio policy.
+zoxide # Directory-jumping database integrated into the fish configuration.
+zram-generator # Create compressed RAM swap from the systemd zram configuration.

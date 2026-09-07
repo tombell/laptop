@@ -1,32 +1,28 @@
-bluetui
-brightnessctl
-ffmpeg
-ghostty
-gnome-keyring
-gnome-themes-extra
-greetd
-hypridle
-hyprland
-hyprlock
-hyprshot
-imagemagick
-impala
-imv
-noto-fonts
-noto-fonts-cjk
-noto-fonts-emoji
-polkit-gnome
-qt6ct
-quickshell
-ttf-iosevkaterm-nerd
-upower
-uwsm
-wireless-regdb
-wiremix
-xdg-desktop-portal-gtk
-xdg-desktop-portal-hyprland
-xdg-user-dirs
-zsh
-zsh-autosuggestions
-zsh-completions
-zsh-syntax-highlighting
+bluetui # Terminal Bluetooth device manager opened from the desktop bar.
+brightnessctl # Control display and keyboard backlight brightness.
+ffmpeg # Convert and inspect audio and video files.
+ghostty # Terminal emulator launched by Hyprland and desktop bar controls.
+gnome-keyring # Store desktop application secrets; started by keyring setup.
+gnome-themes-extra # Provide the Adwaita-dark GTK theme selected by GUI setup.
+greetd # Start the configured automatic Hyprland login and fallback login prompt.
+hypridle # Run desktop idle actions such as locking and display power saving.
+hyprland # Wayland compositor for the shared Linux desktop.
+hyprlock # Lock the Wayland desktop session.
+hyprshot # Capture screenshots in Hyprland.
+imagemagick # Resize, convert, and edit images from the command line.
+impala # Terminal Wi-Fi manager for iwd, opened from the desktop bar.
+imv # View images in the Wayland session.
+noto-fonts # General-purpose text fonts and fallback glyph coverage.
+noto-fonts-cjk # Chinese, Japanese, and Korean glyph coverage.
+noto-fonts-emoji # Color emoji glyphs for desktop applications.
+polkit-gnome # Authentication agent for desktop actions requiring elevated privileges.
+qt6ct # Configure Qt 6 appearance through the Hyprland platform-theme setting.
+quickshell # Run the configured desktop bar, launcher, notifications, and OSD.
+ttf-iosevkaterm-nerd # Supply the icon font explicitly used by the Quickshell theme.
+upower # Battery status service consumed by the Quickshell bar.
+uwsm # Manage the Hyprland session and application environment through systemd.
+wireless-regdb # Wi-Fi regulatory data for permitted channels and transmit power.
+wiremix # Terminal PipeWire volume mixer opened from the desktop bar.
+xdg-desktop-portal-gtk # GTK file chooser and fallback desktop portals.
+xdg-desktop-portal-hyprland # Hyprland screen sharing and screenshot portals.
+xdg-user-dirs # Manage standard home folders such as Downloads and Pictures.

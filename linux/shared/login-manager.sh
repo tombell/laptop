@@ -3,13 +3,14 @@ set -euo pipefail
 
 echo "==> Setting up greetd login manager…"
 
-if ! grep -Fq 'command = "uwsm start -- hyprland.desktop >/dev/null 2>&1"' "/etc/greetd/config.toml" 2>/dev/null; then
+if ! grep -Fq 'command = "uwsm start -- hyprland.desktop >/dev/null 2>&1"' "/etc/greetd/config.toml" 2>/dev/null ||
+  ! grep -Fq 'command = "agreety --cmd /usr/bin/fish"' "/etc/greetd/config.toml" 2>/dev/null; then
   sudo tee /etc/greetd/config.toml <<EOF >/dev/null
 [terminal]
 vt = 1
 
 [default_session]
-command = "agreety --cmd /usr/bin/zsh"
+command = "agreety --cmd /usr/bin/fish"
 user = "greeter"
 
 [initial_session]

@@ -84,18 +84,30 @@ were installed instead.
 ## Package lists
 
 Arch packages live under `linux/arch/packages/`. Each directory contains
-`pacman.txt` and `aur.txt`, with one package name per line:
+`pacman.txt` and `aur.txt`, with one package name per line. Add a short reason
+after `#` for each pacman package. Both manifest types accept inline comments,
+full-line comments, and blank lines:
+
+```text
+upower # Battery status service consumed by the Quickshell bar.
+```
 
 | Directory | Contents |
 | --- | --- |
-| `common/` | Shared Arch command-line packages |
+| `common/` | Shared system, networking, audio, and command-line packages |
 | `desktop/` | Hyprland, greetd, fonts, and desktop applications |
 | `thinkpad/` | ThinkPad additions, including Plymouth |
 
-Put shared command-line packages in `common/`, desktop packages in `desktop/`,
-and hardware-specific packages in the machine's directory. Machine additions
-can be empty. The loader combines all three sets and removes
-duplicate names. Direct use of the package helper defaults to ThinkPad.
+Put shared system services and command-line packages in `common/`, desktop
+applications and appearance packages in `desktop/`, and hardware-specific
+packages in the machine's directory. Machine additions
+can be empty. Keep each package in one manifest, with each list sorted by
+package name. The loader strips comments and blank lines, combines all three
+sets, and removes duplicate names before installation. Direct use of the package
+helper defaults to ThinkPad.
+
+Limine, mkinitcpio, LUKS tools, and EFI partition tools live in `common/`.
+The ThinkPad boot script retains its BusyBox initramfs with `udev` and `encrypt`.
 
 The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
 Shared Linux configuration, including the desktop and login manager, lives in

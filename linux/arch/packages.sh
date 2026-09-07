@@ -13,16 +13,30 @@ thinkpad) ;;
   ;;
 esac
 
-# Read all sets before installing anything. sort removes duplicate entries.
-pacman_list=$(sort -u "$package_dir/common/pacman.txt" "$package_dir/desktop/pacman.txt" "$package_dir/$package_profile/pacman.txt")
-aur_list=$(sort -u "$package_dir/common/aur.txt" "$package_dir/desktop/aur.txt" "$package_dir/$package_profile/aur.txt")
-mapfile -t pacman_packages <<<"$pacman_list"
-mapfile -t aur_packages <<<"$aur_list"
-
-command -v yay >/dev/null || {
-  echo "yay is required to install AUR packages" >&2
-  exit 1
+# Manifests accept one package per line, optional # reasons, and blank lines.
+read_package_list() {
+  sed -e 's/#.*//' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e '/^$/d' "$@" | sort -u
 }
 
-sudo pacman -S --noconfirm --needed "${pacman_packages[@]}"
-yay -S --noconfirm --needed --removemake "${aur_packages[@]}"
+# Read all sets before installing anything, deduplicating the package names.
+pacman_list=$(read_package_list "$package_dir/common/pacman.txt" "$package_dir/desktop/pacman.txt" "$package_dir/$package_profile/pacman.txt")
+aur_list=$(read_package_list "$package_dir/common/aur.txt" "$package_dir/desktop/aur.txt" "$package_dir/$package_profile/aur.txt")
+pacman_packages=()
+aur_packages=()
+if [[ -n "$pacman_list" ]]; then
+  mapfile -t pacman_packages <<<"$pacman_list"
+fi
+if [[ -n "$aur_list" ]]; then
+  mapfile -t aur_packages <<<"$aur_list"
+  command -v yay >/dev/null || {
+    echo "yay is required to install AUR packages" >&2
+    exit 1
+  }
+fi
+
+if (( ${#pacman_packages[@]} )); then
+  sudo pacman -S --noconfirm --needed "${pacman_packages[@]}"
+fi
+if (( ${#aur_packages[@]} )); then
+  yay -S --noconfirm --needed --removemake "${aur_packages[@]}"
+fi
