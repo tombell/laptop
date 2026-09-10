@@ -48,7 +48,9 @@ packages, boot, snapshots, networking, and greetd alone.
 
 Both scripts install Homebrew if needed, install the packages in
 `macos/Brewfile`, apply macOS defaults, install mise tools, and add the Herdr JJ
-Status plugin. The Brewfile selects some packages using the Mac's ComputerName.
+Status plugin. The Brewfile maps the Mac's ComputerName to a role (Pyra: personal, Brighid: mini,
+Haze: work) and selects packages accordingly. Unknown computer names raise an error;
+update the mapping in `macos/Brewfile` when adding or renaming a Mac.
 
 Personal setup applies the `macos` and `personal` dotfile tags and installs the
 `Personal` SSH key. Work setup applies `macos` and `work`, installs both
