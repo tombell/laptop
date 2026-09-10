@@ -34,9 +34,10 @@ if [[ -n "$aur_list" ]]; then
   }
 fi
 
+# Keep replacement prompts available when the requested packages conflict with installed ones.
 if (( ${#pacman_packages[@]} )); then
-  sudo pacman -S --noconfirm --needed "${pacman_packages[@]}"
+  sudo pacman -S --needed "${pacman_packages[@]}"
 fi
 if (( ${#aur_packages[@]} )); then
-  yay -S --noconfirm --needed --removemake "${aur_packages[@]}"
+  yay -S --needed --removemake "${aur_packages[@]}"
 fi
