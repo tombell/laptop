@@ -113,8 +113,10 @@ installs `limine-tool`. Its pacman hooks rebuild UKIs after kernel and initramfs
 dependency updates, remove entries for uninstalled kernels, and update the EFI
 loader after Limine upgrades. No extra pacman hook or timer is needed.
 
-On a fresh setup, `/boot/limine.conf` starts with a one-second menu timeout and
-the first entry selected. Existing menu settings and entries are preserved.
+Both Arch profiles apply the branding and palette from `linux/arch/limine.conf`,
+with a one-second timeout and the first entry selected. Setup replaces those
+shared menu options while preserving other settings and boot entries. It saves
+an existing menu once as `/boot/limine.conf.pre-laptop`.
 `limine-tool` maintains generated entries; kernel parameters belong in
 `/etc/default/limine`, while menu settings such as `timeout` belong in
 `/boot/limine.conf`.

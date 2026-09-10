@@ -47,13 +47,8 @@ prepare_macbook_bootloader() {
     exit 1
   fi
 
-  # Menu settings live here; limine-tool owns the generated kernel entries.
-  if [ ! -f /boot/limine.conf ]; then
-    sudo tee /boot/limine.conf <<'EOF' >/dev/null
-timeout: 1
-default_entry: 1
-EOF
-  fi
+  source "$ROOT_DIR/linux/arch/limine-menu.sh"
+  configure_limine_menu
 
   echo "==> Preparing T2 encrypted boot..."
   sudo install -d /etc/mkinitcpio.conf.d /etc/modules-load.d

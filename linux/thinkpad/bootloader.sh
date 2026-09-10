@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Setting up limine bootloader..."
+echo "==> Setting up Limine bootloader..."
 
 if [ ! -f "/etc/default/limine" ]; then
   command -v blkid >/dev/null || {
@@ -47,25 +47,8 @@ if ! grep -Eq '^HOOKS=.*\bplymouth\b' /etc/mkinitcpio.conf; then
   sudo sed -Ei 's/\budev\b/udev plymouth/' /etc/mkinitcpio.conf
 fi
 
-if [ ! -f "/boot/limine.conf" ]; then
-  sudo tee /boot/limine.conf <<EOF >/dev/null
-default_entry: 2
-interface_branding: Arch Linux Bootloader
-interface_branding_color: 2
-hash_mismatch_panic: no
-
-backdrop: 1a1b26
-
-term_palette: 15161e;f7768e;9ece6a;e0af68;7aa2f7;bb9af7;7dcfff;a9b1d6
-term_palette_bright: 414868;f7768e;9ece6a;e0af68;7aa2f7;bb9af7;7dcfff;c0caf5
-
-term_foreground: c0caf5
-term_background: 1a1b26
-term_foreground_bright: c0caf5
-term_background_bright: 24283b
-
-EOF
-fi
+source "$ROOT_DIR/linux/arch/limine-menu.sh"
+configure_limine_menu
 
 command -v limine-install >/dev/null || {
   echo "limine-install is required to install the bootloader" >&2
@@ -77,8 +60,8 @@ command -v limine-mkinitcpio >/dev/null || {
   exit 1
 }
 
-echo "==> Installing Limine and registering its UEFI entry..."
-sudo limine-install
-
 echo "==> Building Limine kernel entries..."
 sudo limine-mkinitcpio
+
+echo "==> Installing Limine and registering its UEFI entry..."
+sudo limine-install
