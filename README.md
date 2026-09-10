@@ -108,8 +108,30 @@ running the script.
 
 Boot setup uses mkinitcpio with the T2 keyboard drivers, the existing console
 keymap, and the systemd `sd-encrypt` hook. It reads the LUKS UUID and builds Limine
-unified kernel images with the T2 kernel parameters. Limine's package hooks
-update the EFI loader.
+unified kernel images with the T2 kernel parameters. The shared AUR package list
+installs `limine-tool`. Its pacman hooks rebuild UKIs after kernel and initramfs
+dependency updates, remove entries for uninstalled kernels, and update the EFI
+loader after Limine upgrades. No extra pacman hook or timer is needed.
+
+On a fresh setup, `/boot/limine.conf` starts with a one-second menu timeout and
+the first entry selected. Existing menu settings and entries are preserved.
+`limine-tool` maintains generated entries; kernel parameters belong in
+`/etc/default/limine`, while menu settings such as `timeout` belong in
+`/boot/limine.conf`.
+
+For maintenance after the initial setup:
+
+```sh
+limine-list                         # Inspect the generated menu
+sudo limine-update                  # Update the EFI loader and rebuild UKIs
+sudo limine-mkinitcpio              # Rebuild UKIs after kernel command-line or hook changes
+```
+
+Do not rerun the full OS setup just to refresh Limine. When migrating from manual
+entries, back up `/boot/limine.conf`, verify the generated UKI has booted, then
+remove the obsolete entry with `sudo limine-entry-tool --remove-entry 'ENTRY NAME'`.
+Check the default selection before reducing the menu timeout. Retire custom EFI
+copy hooks once the packaged `80-limine-efi-deploy.hook` is in place.
 
 The script overwrites `/etc/default/limine`,
 `/etc/mkinitcpio.conf.d/10-t2-encryption.conf`, and `/etc/modules-load.d/t2.conf`.
