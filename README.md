@@ -17,13 +17,13 @@ cd ~/.laptop
 Use the existing checkout if you already have one. Run `./setup --help` to list
 the commands, or choose one below. Run setup as your regular user:
 
-| Machine | Command |
-| --- | --- |
-| Personal Mac | `./setup macos personal` |
-| Work Mac | `./setup macos work` |
-| ThinkPad with Arch Linux | `./setup arch os thinkpad`, then `./setup arch user` |
-| T2 MacBook Air with Arch Linux | `./setup arch os macbook`, then `./setup arch user` |
-| Raspberry Pi with Debian or Raspberry Pi OS | `./setup debian rpi` |
+| Machine                                     | Command                                              |
+| ------------------------------------------- | ---------------------------------------------------- |
+| Personal Mac                                | `./setup macos personal`                             |
+| Work Mac                                    | `./setup macos work`                                 |
+| ThinkPad with Arch Linux                    | `./setup arch os thinkpad`, then `./setup arch user` |
+| T2 MacBook Air with Arch Linux              | `./setup arch os macbook`, then `./setup arch user`  |
+| Raspberry Pi with Debian or Raspberry Pi OS | `./setup debian rpi`                                 |
 
 macOS and Arch OS setup install 1Password CLI. The macOS scripts and Arch user
 setup call `op signin` to export SSH keys. Configure your CLI account before that
@@ -61,11 +61,11 @@ Personal setup applies the `macos` and `personal` dotfile tags and installs the
 Run OS setup when preparing a machine, then rerun user setup whenever you
 want to apply your configuration.
 
-| Phase | Command | What it does |
-| --- | --- | --- |
-| ThinkPad OS setup | `./setup arch os thinkpad` | Packages, bootloader, snapshots, networking, zram, system services, and greetd |
-| MacBook OS setup | `./setup arch os macbook` | The same OS setup with T2 boot and fan control |
-| User configuration on either machine | `./setup arch user` | Dotfiles, fonts, GNOME Keyring, GTK preferences, PipeWire, SSH keys, fish, and mise |
+| Phase                                | Command                    | What it does                                                                        |
+| ------------------------------------ | -------------------------- | ----------------------------------------------------------------------------------- |
+| ThinkPad OS setup                    | `./setup arch os thinkpad` | Packages, bootloader, snapshots, networking, zram, system services, and greetd      |
+| MacBook OS setup                     | `./setup arch os macbook`  | The same OS setup with T2 boot and fan control                                      |
+| User configuration on either machine | `./setup arch user`        | Dotfiles, fonts, GNOME Keyring, GTK preferences, PipeWire, SSH keys, fish, and mise |
 
 Run both phases as your regular user. OS setup uses sudo where needed. User
 setup needs a running systemd user session, such as a desktop, TTY, or SSH login.
@@ -244,12 +244,12 @@ and blank lines:
 upower # Battery status service consumed by the Quickshell bar.
 ```
 
-| Directory | Contents |
-| --- | --- |
-| `common/` | Shared system, networking, audio, and command-line packages |
-| `desktop/` | Hyprland, greetd, fonts, and desktop applications for both Arch machines |
-| `thinkpad/` | ThinkPad additions, including Plymouth |
-| `macbook/` | MacBook additions for encrypted T2 boot |
+| Directory   | Contents                                                                 |
+| ----------- | ------------------------------------------------------------------------ |
+| `common/`   | Shared system, networking, audio, and command-line packages              |
+| `desktop/`  | Hyprland, greetd, fonts, and desktop applications for both Arch machines |
+| `thinkpad/` | ThinkPad additions, including Plymouth                                   |
+| `macbook/`  | MacBook additions for encrypted T2 boot                                  |
 
 Keep each package in one list and sort by package name. Machine lists can be
 empty. The loader strips comments and blank lines, combines the common, desktop,
