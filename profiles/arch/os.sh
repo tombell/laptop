@@ -34,4 +34,3 @@ if [[ -f "$ROOT_DIR/linux/$machine/services.sh" ]]; then
 fi
 
 log "Arch OS setup complete"
-log "Run ./setup arch user before rebooting"
