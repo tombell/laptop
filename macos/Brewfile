@@ -64,6 +64,7 @@ when :personal
 
   mas 'Xcode', id: 497_799_835
 when :mini
+  brew 'container'
   brew 'ffmpeg'
   brew 'imagemagick'
   brew 'tailscale'
