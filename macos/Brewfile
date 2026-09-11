@@ -38,7 +38,7 @@ cask 'keka'
 cask 'tombell/formulae/font-iosevka-custom'
 
 if %i[personal mini].include?(machine)
-  cask 'chatgpt'
+  # cask 'chatgpt'
   cask 'codex'
 end
 
