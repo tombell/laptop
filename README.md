@@ -71,8 +71,12 @@ Run both phases as your regular user. OS setup uses sudo where needed. User
 setup needs a running systemd user session, such as a desktop, TTY, or SSH login.
 It assumes OS setup has installed the required packages.
 
-Both OS profiles configure packages, boot, snapshots, and system services in that
-order. The MacBook checks its boot prerequisites before installing packages.
+Both OS profiles use `profiles/arch/os.sh`. They check boot prerequisites, install
+packages, install the bootloader, configure snapshots, and configure system
+services in that order. Both reject root runs before changing the system.
+The MacBook writes its T2 boot configuration before package upgrades because
+package hooks can rebuild its boot images. The ThinkPad adds its Plymouth hooks
+after installing packages. Both build kernel entries before installing Limine.
 greetd starts Hyprland through uwsm and logs in as `tombell`. Finish user setup
 before rebooting into the desktop.
 
@@ -267,9 +271,10 @@ The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
 `setup` dispatches commands to the entry points in `profiles/arch/`,
 `profiles/macos.sh`, and `profiles/rpi.sh`.
 Shared Linux user configuration lives in `linux/shared/`. Shared Arch system
-setup, including Snapper and greetd, lives in `linux/arch/`. Machine-specific
-boot setup remains under `linux/thinkpad/` and `linux/macbook/`, alongside the
-MacBook fan service setup.
+setup, including Limine installation, Snapper, and greetd, lives in `linux/arch/`.
+Machine-specific boot settings remain under `linux/thinkpad/` and `linux/macbook/`,
+alongside the MacBook fan service setup. The machine profiles select the hardware
+and run the shared OS profile.
 
 Arch setup messages use `log` from `common/bootstrap.sh`, which adds the `==>`
 prefix. Use a short action such as `Configuring greetd`, without trailing dots.
