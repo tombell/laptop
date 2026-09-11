@@ -92,13 +92,47 @@ when changing your login shell to fish. mise installs the configured user tools.
 
 ### ThinkPad
 
-The ThinkPad uses Limine and Plymouth. Boot setup assumes AMD graphics and an
-encrypted Btrfs root, with mkinitcpio's BusyBox `udev` and `encrypt` hooks.
+The ThinkPad uses Limine and Plymouth. Boot setup requires x86_64 UEFI boot,
+a FAT EFI system partition mounted at `/boot`, and Btrfs subvolume `@` mounted
+at `/` directly inside LUKS, without LVM.
 
-Setup writes `/etc/mkinitcpio.conf.d/10-thinkpad-encryption.conf` to add `amdgpu`
-and insert `plymouth` after `udev`. It keeps other modules and hooks and avoids
-duplicating additions from earlier setup runs. It no longer edits
-`/etc/mkinitcpio.conf`. Existing Limine defaults are kept.
+Both Arch profiles use mkinitcpio's `systemd`, `sd-vconsole`, and `sd-encrypt`
+hooks. The ThinkPad adds `plymouth` after `systemd` and keeps `amdgpu` and other
+existing modules. Setup writes the complete hook list to
+`/etc/mkinitcpio.conf.d/10-thinkpad-encryption.conf`:
+
+```sh
+HOOKS=(base systemd plymouth autodetect microcode modconf kms keyboard sd-vconsole block sd-encrypt filesystems fsck)
+```
+
+Setup detects the backing device for the mounted root and reads its LUKS UUID.
+It migrates `cryptdevice=...:root` in `/etc/default/limine` to
+`rd.luks.name=<LUKS-UUID>=root`, keeping `/dev/mapper/root` and other Limine
+settings. The optional `allow-discards` flag becomes
+`rd.luks.options=<LUKS-UUID>=discard`. Reruns keep the migrated parameters.
+Keyfile parameters, other mapper names, unsupported encryption options, and
+configurations with no explicit root encryption parameter stop the migration
+before it changes the boot configuration. Setup also checks Limine's effective
+normal and fallback command lines for installed kernels. If another configuration
+overrides the migrated parameters, it restores the previous Limine defaults and
+leaves the mkinitcpio hooks alone.
+
+Existing Limine defaults and the ThinkPad mkinitcpio drop-in are backed up once
+with a `.pre-systemd` suffix. The new command line and hooks are applied together
+after package installation, before rebuilding the boot images.
+
+Before the first migration, review `/etc/mkinitcpio.conf`, its drop-ins and
+presets, `/etc/crypttab`, and `/etc/crypttab.initramfs` for local boot requirements.
+The new hook list replaces existing hooks, so any custom hooks need a systemd
+equivalent or an explicit addition. Check the console keymap in
+`/etc/vconsole.conf` too.
+
+Keep a separate copy of the working UKI and a Limine entry pointing to it before
+rebuilding. A regenerated fallback image uses the new hooks too, so it is not
+a copy of the previous boot setup. After migration, inspect
+`limine-entry-tool --get-cmdline linux` and the built UKI, then reboot and test
+keyboard input, the Plymouth passphrase prompt, root mounting, and desktop login.
+Keep the saved UKI until that boot succeeds.
 
 ### T2 MacBook Air
 
@@ -150,9 +184,10 @@ It saves existing Limine defaults once as `/etc/default/limine.pre-macbook`.
 Check other mkinitcpio drop-ins for settings that could override this configuration.
 
 Both bootloader scripts have separate prepare, configure, and install functions.
-They use the same helper to write their [mkinitcpio drop-ins](https://man.archlinux.org/man/mkinitcpio.conf.5).
-The ThinkPad extends its existing module and hook lists; the MacBook specifies
-the complete lists required for T2 boot. Drop-ins are skipped if mkinitcpio is
+They share boot prerequisite checks, detection of the root LUKS UUID, and the
+systemd hook list in their [mkinitcpio drop-ins](https://man.archlinux.org/man/mkinitcpio.conf.5).
+The ThinkPad extends its existing module list and adds Plymouth; the MacBook
+specifies the modules required for T2 boot. Drop-ins are skipped if mkinitcpio is
 called with an explicit `--config` or a preset with `ALL_config`.
 
 The script builds the boot images before installing Limine as the EFI fallback
@@ -273,9 +308,10 @@ empty. The loader strips comments and blank lines, combines the common, desktop,
 and machine lists, and removes duplicates before installing. Running the package
 helper directly defaults to ThinkPad.
 
-Both Arch machines share Limine, mkinitcpio, LUKS tools, and EFI partition tools.
-The MacBook list includes `intel-ucode` and `systemd-ukify`. Ukify builds its
-unified kernel images; the machine boot script chooses the initramfs hooks.
+Both Arch machines share Limine, mkinitcpio, systemd-ukify, LUKS tools, and EFI
+partition tools. Ukify builds their unified kernel images. Both use the same
+systemd initramfs hooks, with Plymouth added on the ThinkPad. CPU microcode and
+hardware drivers remain in the machine lists.
 
 The Pi uses `linux/debian/packages/apt.txt`; macOS uses `macos/Brewfile`.
 

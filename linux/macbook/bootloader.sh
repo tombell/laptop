@@ -4,28 +4,11 @@ set -euo pipefail
 prepare_macbook_bootloader() {
   log "Checking T2 MacBook boot prerequisites"
 
-  if [ "$(uname -m)" != x86_64 ] || [ ! -d /sys/firmware/efi ]; then
-    die "This profile requires an Intel Mac running Arch in UEFI mode"
-  fi
+  check_encrypted_boot_prerequisites
   pacman -Q linux-t2 >/dev/null
-  if [ "$(findmnt -nro FSTYPE /)" != btrfs ] || [ "$(findmnt -nro FSROOT /)" != /@ ]; then
-    die "Expected Btrfs subvolume @ mounted at /"
-  fi
-  if [ "$(findmnt -nro FSTYPE --mountpoint /boot)" != vfat ]; then
-    die "Mount the FAT EFI system partition at /boot before running this profile"
-  fi
 
-  local root_device parent_device luks_uuid kernel_dir kernel_version
-  root_device=$(readlink -f "$(findmnt -nro SOURCE --nofsroot /)")
-  if [ "$(lsblk -dnro TYPE "$root_device")" != crypt ]; then
-    die "Expected / to be on a directly mapped LUKS volume, without LVM"
-  fi
-  local parent_devices=(/sys/class/block/"${root_device##*/}"/slaves/*)
-  if [ "${#parent_devices[@]}" -ne 1 ] || [ ! -e "${parent_devices[0]}" ]; then
-    die "Expected exactly one backing device for the LUKS mapping"
-  fi
-  parent_device="/dev/${parent_devices[0]##*/}"
-  luks_uuid=$(sudo cryptsetup luksUUID "$parent_device")
+  local luks_uuid kernel_dir kernel_version
+  luks_uuid=$(encrypted_root_luks_uuid)
 
   kernel_version=""
   for kernel_dir in /usr/lib/modules/*; do
@@ -47,9 +30,8 @@ configure_macbook_bootloader() {
 
   log "Configuring T2 encrypted boot"
 
-  write_mkinitcpio_config 10-t2-encryption.conf <<'EOF'
+  write_systemd_mkinitcpio_config 10-t2-encryption.conf <<'EOF'
 MODULES=(t2bce_dma t2bce_core t2bce_vhci usbhid hid_apple)
-HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole block sd-encrypt filesystems fsck)
 EOF
   sudo install -d /etc/modules-load.d
   echo t2bce_vhci | sudo tee /etc/modules-load.d/t2.conf >/dev/null

@@ -34,6 +34,7 @@ power-profiles-daemon # Power-profile service used by the Quickshell bar.
 ripgrep # Search source code and configuration from the terminal and editor.
 snap-pac # Create Snapper snapshots around pacman transactions.
 snapper # Configure and manage root and home Btrfs snapshots.
+systemd-ukify # Build the unified kernel images used by both Limine profiles.
 unzip # Extract the custom Iosevka font archive during font setup.
 usage # Shell completion support for mise.
 wireplumber # Manage PipeWire devices, streams, and audio policy.
