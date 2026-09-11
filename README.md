@@ -276,8 +276,9 @@ Machine-specific boot settings remain under `linux/thinkpad/` and `linux/macbook
 alongside the MacBook fan service setup. The machine profiles select the hardware
 and run the shared OS profile.
 
-Arch setup messages use `log` from `common/bootstrap.sh`, which adds the `==>`
-prefix. Use a short action such as `Configuring greetd`, without trailing dots.
+macOS and Arch setup messages use `log` from `common/bootstrap.sh`, which adds
+the `==>` prefix. Use a short action such as `Configuring greetd`, without
+trailing dots.
 Use `die` for fatal errors, which adds `Error:` and writes to standard error.
 
 ## Dotfiles and SSH keys

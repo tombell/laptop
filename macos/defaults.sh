@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Setting macOS defaults..."
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)/common/bootstrap.sh"
+
+log "Configuring macOS defaults"
 
 ###############################################################################
 # APPEARANCE
@@ -142,5 +144,6 @@ defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 # RESTART APPS
 ###############################################################################
 
+log "Restarting Dock and Finder"
 killall Dock 2>/dev/null || true
 killall Finder 2>/dev/null || true

@@ -10,11 +10,11 @@ install_herdr_plugin() {
 
   if herdr plugin list --plugin "$plugin_id" --json |
     grep -Fq "\"plugin_id\":\"${plugin_id}\""; then
-    echo "==> Herdr plugin ${plugin_id} already installed"
+    log "Keeping existing Herdr plugin ${plugin_id}"
     return
   fi
 
-  echo "==> Installing Herdr plugin ${plugin_id}..."
+  log "Installing Herdr plugin ${plugin_id}"
   herdr plugin install "$repository" "$@" --yes
 }
 
