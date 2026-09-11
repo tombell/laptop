@@ -95,6 +95,11 @@ when changing your login shell to fish. mise installs the configured user tools.
 The ThinkPad uses Limine and Plymouth. Boot setup assumes AMD graphics and an
 encrypted Btrfs root, with mkinitcpio's BusyBox `udev` and `encrypt` hooks.
 
+Setup writes `/etc/mkinitcpio.conf.d/10-thinkpad-encryption.conf` to add `amdgpu`
+and insert `plymouth` after `udev`. It keeps other modules and hooks and avoids
+duplicating additions from earlier setup runs. It no longer edits
+`/etc/mkinitcpio.conf`. Existing Limine defaults are kept.
+
 ### T2 MacBook Air
 
 The MacBook needs:
@@ -143,6 +148,12 @@ The script overwrites `/etc/default/limine`,
 `/etc/mkinitcpio.conf.d/10-t2-encryption.conf`, and `/etc/modules-load.d/t2.conf`.
 It saves existing Limine defaults once as `/etc/default/limine.pre-macbook`.
 Check other mkinitcpio drop-ins for settings that could override this configuration.
+
+Both bootloader scripts have separate prepare, configure, and install functions.
+They use the same helper to write their [mkinitcpio drop-ins](https://man.archlinux.org/man/mkinitcpio.conf.5).
+The ThinkPad extends its existing module and hook lists; the MacBook specifies
+the complete lists required for T2 boot. Drop-ins are skipped if mkinitcpio is
+called with an explicit `--config` or a preset with `ALL_config`.
 
 The script builds the boot images before installing Limine as the EFI fallback
 loader. Reboot when you're ready to test it.
