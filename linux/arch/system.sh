@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="${ROOT_DIR:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)}"
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)/common/bootstrap.sh"
+setup_laptop_root
 
-if [[ "$EUID" -eq 0 ]]; then
-  echo "Run Arch system setup as your regular user with sudo access." >&2
-  exit 1
-fi
+require_regular_user "Arch system setup"
 
 pacman -Q iwd zram-generator bluez power-profiles-daemon greetd >/dev/null
 

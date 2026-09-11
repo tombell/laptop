@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)/common/bootstrap.sh"
 LAPTOP_ROOT="${LAPTOP_ROOT:-$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)}"
 package_dir="$LAPTOP_ROOT/linux/arch/packages"
 package_profile="${ARCH_PACKAGE_PROFILE:-thinkpad}"
@@ -8,8 +9,7 @@ package_profile="${ARCH_PACKAGE_PROFILE:-thinkpad}"
 case "$package_profile" in
 thinkpad | macbook) ;;
 *)
-  echo "Unknown Arch package profile: $package_profile" >&2
-  exit 1
+  die "Unknown Arch package profile: $package_profile"
   ;;
 esac
 
@@ -28,16 +28,15 @@ if [[ -n "$pacman_list" ]]; then
 fi
 if [[ -n "$aur_list" ]]; then
   mapfile -t aur_packages <<<"$aur_list"
-  command -v yay >/dev/null || {
-    echo "yay is required to install AUR packages" >&2
-    exit 1
-  }
+  require_command yay "install AUR packages"
 fi
 
 # Keep replacement prompts available when the requested packages conflict with installed ones.
 if (( ${#pacman_packages[@]} )); then
+  log "Installing pacman packages"
   sudo pacman -S --needed "${pacman_packages[@]}"
 fi
 if (( ${#aur_packages[@]} )); then
+  log "Installing AUR packages"
   yay -S --needed --removemake "${aur_packages[@]}"
 fi

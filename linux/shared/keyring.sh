@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+log "Configuring GNOME Keyring"
+
 services_dir="$HOME/.local/share/dbus-1/services"
 mkdir -p "$services_dir"
 
@@ -13,5 +15,5 @@ EOF
 systemctl --user enable --now gnome-keyring-daemon.service
 
 if [ ! -f "$HOME/.local/share/keyrings/default" ]; then
-  echo "==> GNOME Keyring will ask you to initialize a default keyring when an application first stores a secret."
+  log "GNOME Keyring will ask you to create a default keyring when an application first stores a secret"
 fi

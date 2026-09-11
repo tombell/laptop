@@ -25,12 +25,8 @@ setup_dotfiles() {
     tag_args+=("-t" "$tag")
   done
 
-  echo "==> Setting up dotfiles with rcm..."
-
-  command -v rcup >/dev/null || {
-    echo "rcup is required to set up dotfiles" >&2
-    exit 1
-  }
+  require_command rcup "set up dotfiles"
+  log "Applying dotfiles with rcm"
 
   if [ "${#extra_args[@]}" -gt 0 ]; then
     rcup -d "${HOME}/.dotfiles" \

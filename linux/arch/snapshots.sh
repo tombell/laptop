@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Setting up btrfs snapshots..."
+log "Configuring Btrfs snapshots"
 
-command -v snapper >/dev/null || {
-  echo "snapper is required to configure btrfs snapshots" >&2
-  exit 1
-}
+require_command snapper "configure Btrfs snapshots"
 
 if ! sudo snapper list-configs 2>/dev/null | grep -q "root"; then
   sudo snapper -c root create-config /

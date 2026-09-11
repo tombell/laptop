@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Setting up greetd login manager..."
+log "Configuring greetd"
 
 if ! grep -Fq 'command = "uwsm start -- hyprland.desktop >/dev/null 2>&1"' "/etc/greetd/config.toml" 2>/dev/null ||
   ! grep -Fq 'command = "agreety --cmd /usr/bin/fish"' "/etc/greetd/config.toml" 2>/dev/null; then

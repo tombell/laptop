@@ -4,14 +4,12 @@ set -euo pipefail
 source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)/common/bootstrap.sh"
 setup_laptop_root
 
-if [[ "$EUID" -eq 0 ]]; then
-  echo "Run setup arch user as your regular user." >&2
-  exit 1
-fi
+require_regular_user "setup arch user"
 systemctl --user show-environment >/dev/null || {
-  echo "A running systemd user session is required for user configuration." >&2
-  exit 1
+  die "A running systemd user session is required for user configuration"
 }
+
+log "Setting up Arch user configuration"
 
 source "$ROOT_DIR/common/rcm.sh"
 source "$ROOT_DIR/common/ssh.sh"
@@ -28,3 +26,5 @@ setup_ssh_key "Personal" "Personal"
 
 source "$ROOT_DIR/linux/shared/shell.sh"
 source "$ROOT_DIR/common/mise.sh"
+
+log "Arch user setup complete"

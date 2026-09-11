@@ -2,6 +2,8 @@
 set -euo pipefail
 
 configure_limine_menu() {
+  log "Configuring Limine menu"
+
   local menu_file existing_menu=/dev/null
   menu_file=$(mktemp)
 

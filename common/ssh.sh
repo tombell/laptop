@@ -9,15 +9,12 @@ setup_ssh_key() {
   local temp_public_key
   local temp_private_key
 
-  command -v op >/dev/null || {
-    echo "op is required to set up SSH keys" >&2
-    exit 1
-  }
+  require_command op "set up SSH keys"
 
   mkdir -p "$HOME/.ssh"
   chmod 700 "$HOME/.ssh"
 
-  echo "==> Setting up SSH keys for ${name}..."
+  log "Configuring SSH key ${name}"
 
   if [ ! -e "$public_key" ]; then
     temp_public_key="$(mktemp "${public_key}.XXXXXX")"

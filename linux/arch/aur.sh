@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Configuring makepkg..."
+log "Configuring makepkg"
 
 sudo sed -i '/^OPTIONS=(/s/\(^.*\s\)\(debug\)\(\s.*$\)/\1!debug\3/' /etc/makepkg.conf
 
@@ -11,10 +11,7 @@ if ! command -v yay &>/dev/null; then
   install_yay() {
     local temp_dir
 
-    command -v git >/dev/null || {
-      echo "git is required to install yay" >&2
-      exit 1
-    }
+    require_command git "install yay"
 
     temp_dir="$(mktemp -d)"
     trap 'rm -rf "$temp_dir"' RETURN
@@ -26,6 +23,6 @@ if ! command -v yay &>/dev/null; then
     trap - RETURN
   }
 
-  echo "==> Installing yay AUR helper..."
+  log "Installing yay"
   install_yay
 fi

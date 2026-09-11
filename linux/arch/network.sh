@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Configuring iwd, systemd-networkd, and systemd-resolved..."
+log "Configuring iwd, systemd-networkd, and systemd-resolved"
 
 # Keep existing administrator and generated network definitions, including masks.
 network_configured=false
@@ -17,7 +17,7 @@ if [[ "$network_configured" == false ]]; then
     sudo install -Dm644 "$network_file" "/etc/systemd/network/${network_file##*/}"
   done
 else
-  echo "Keeping existing networkd configuration."
+  log "Keeping existing networkd configuration"
 fi
 
 # enable --now starts inactive services without restarting active connections.
@@ -31,4 +31,4 @@ if [[ "$(readlink -f /etc/resolv.conf || true)" != /run/systemd/resolve/stub-res
   sudo ln -sfn /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 fi
 
-echo "Network services enabled. New network definitions apply when links next appear or after reboot."
+log "Network services enabled. New network definitions apply when links next appear or after reboot"

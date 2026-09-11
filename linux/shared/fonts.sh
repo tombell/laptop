@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Installing custom Iosevka font..."
-
 FONT_VERSION=34.3.0
 
 install_custom_iosevka() {
@@ -11,18 +9,13 @@ install_custom_iosevka() {
   local font_url
 
   if [ -e "$font_path" ]; then
+    log "Keeping existing custom Iosevka font"
     return
   fi
 
-  command -v curl >/dev/null || {
-    echo "curl is required to download custom Iosevka" >&2
-    exit 1
-  }
-
-  command -v unzip >/dev/null || {
-    echo "unzip is required to extract custom Iosevka" >&2
-    exit 1
-  }
+  require_command curl "download custom Iosevka"
+  require_command unzip "extract custom Iosevka"
+  log "Installing custom Iosevka font"
 
   temp_dir="$(mktemp -d)"
   trap 'rm -rf "$temp_dir"' RETURN

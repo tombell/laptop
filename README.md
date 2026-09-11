@@ -271,6 +271,10 @@ setup, including Snapper and greetd, lives in `linux/arch/`. Machine-specific
 boot setup remains under `linux/thinkpad/` and `linux/macbook/`, alongside the
 MacBook fan service setup.
 
+Arch setup messages use `log` from `common/bootstrap.sh`, which adds the `==>`
+prefix. Use a short action such as `Configuring greetd`, without trailing dots.
+Use `die` for fatal errors, which adds `Error:` and writes to standard error.
+
 ## Dotfiles and SSH keys
 
 The scripts clone [tombell/dotfiles](https://github.com/tombell/dotfiles) into

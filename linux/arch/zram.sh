@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Configuring compressed RAM swap..."
+log "Configuring zram"
 
 zram_configured=false
 for zram_directory in /etc/systemd /run/systemd /usr/local/lib/systemd /usr/lib/systemd; do
@@ -14,7 +14,7 @@ done
 if [[ "$zram_configured" == false ]]; then
   sudo install -Dm644 "$ROOT_DIR/linux/arch/config/zram-generator.conf" /etc/systemd/zram-generator.conf
 else
-  echo "Keeping existing zram configuration."
+  log "Keeping existing zram configuration"
 fi
 
 zram_dropin=/etc/systemd/system/systemd-zram-setup@zram0.service.d/disable-zswap.conf
@@ -31,5 +31,5 @@ if [[ "$(systemctl show --property=LoadState --value dev-zram0.swap)" == loaded 
   fi
   sudo systemctl start dev-zram0.swap
 else
-  echo "Existing configuration does not generate zram0 swap; keeping it unchanged."
+  log "Keeping existing swap configuration without zram0"
 fi
