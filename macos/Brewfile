@@ -10,6 +10,7 @@ machine = {
 tap 'tombell/formulae', trusted: true
 
 brew 'bat'
+brew 'eza'
 brew 'fd'
 brew 'fish'
 brew 'fzf'
