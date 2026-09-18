@@ -5,6 +5,7 @@ log "Configuring makepkg"
 
 sudo sed -i '/^OPTIONS=(/s/\(^.*\s\)\(debug\)\(\s.*$\)/\1!debug\3/' /etc/makepkg.conf
 
+log "Installing AUR build dependencies"
 sudo pacman -S --noconfirm --needed base-devel git
 
 if ! command -v yay &>/dev/null; then
