@@ -26,11 +26,6 @@ ARCH_PACKAGE_PROFILE="$machine" source "$ROOT_DIR/linux/arch/packages.sh"
 
 "install_${machine}_bootloader"
 source "$ROOT_DIR/linux/arch/snapshots.sh"
-source "$ROOT_DIR/linux/arch/system.sh"
-
-if [[ -f "$ROOT_DIR/linux/$machine/services.sh" ]]; then
-  # shellcheck source=/dev/null
-  source "$ROOT_DIR/linux/$machine/services.sh"
-fi
+source "$ROOT_DIR/linux/arch/system.sh" "$machine"
 
 log "Arch OS setup complete"
