@@ -17,7 +17,7 @@ log "Setting up Arch Linux on $machine_name"
 source "$ROOT_DIR/linux/arch/bootloader.sh"
 # shellcheck source=/dev/null
 source "$ROOT_DIR/linux/$machine/bootloader.sh"
-# T2 boot configuration must be in place before package hooks rebuild images.
+# Check prerequisites before package installation; configure boot afterward.
 "prepare_${machine}_bootloader"
 
 source "$ROOT_DIR/linux/arch/pacman.sh"

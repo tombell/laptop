@@ -30,6 +30,7 @@ pipewire-alsa # Route applications using ALSA through PipeWire.
 pipewire-audio # Audio devices, processing, and Bluetooth audio support for PipeWire.
 pipewire-jack # Provide JACK compatibility through PipeWire.
 pipewire-pulse # Provide PulseAudio compatibility through PipeWire.
+plymouth # Graphical boot splash and encrypted-root prompt for both Arch profiles.
 power-profiles-daemon # Power-profile service used by the Quickshell bar.
 ripgrep # Search source code and configuration from the terminal and editor.
 snap-pac # Create Snapper snapshots around pacman transactions.

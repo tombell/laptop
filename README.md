@@ -74,9 +74,11 @@ It assumes OS setup has installed the required packages.
 Both OS profiles use `profiles/arch/os.sh`. They check boot prerequisites, install
 packages, install the bootloader, configure snapshots, and configure system
 services in that order. Both reject root runs before changing the system.
-The MacBook writes its T2 boot configuration before package upgrades because
-package hooks can rebuild its boot images. The ThinkPad adds its Plymouth hooks
-after installing packages. Both build kernel entries before installing Limine.
+Both prepare functions only check boot prerequisites and the root LUKS UUID.
+Package hooks use the existing working boot configuration during installation.
+Both install functions then configure boot, validate kernel command lines, build
+kernel entries, and install Limine. The machines must already have a working
+kernel and boot configuration before running setup.
 greetd starts Hyprland through uwsm and logs in as `tombell`. Finish user setup
 before rebooting into the desktop.
 
@@ -97,8 +99,11 @@ a FAT EFI system partition mounted at `/boot`, and Btrfs subvolume `@` mounted
 at `/` directly inside LUKS, without LVM.
 
 Both Arch profiles use mkinitcpio's `systemd`, `sd-vconsole`, and `sd-encrypt`
-hooks. The ThinkPad adds `plymouth` after `systemd` and keeps `amdgpu` and other
-existing modules. Setup writes the complete hook list to
+hooks, with `plymouth` after `systemd` in both profiles. Both install Plymouth
+and share `quiet splash`, kernel and systemd/udev logging suppression, and a
+hidden console cursor. Both pass `zswap.enabled=0` to disable zswap from boot,
+matching the shared zram policy. ThinkPad alone blacklists `sp5100_tco` and sets
+`MODULES=(amdgpu)`. Setup writes its complete hook list to
 `/etc/mkinitcpio.conf.d/10-thinkpad-encryption.conf`:
 
 ```sh
@@ -106,33 +111,13 @@ HOOKS=(base systemd plymouth autodetect microcode modconf kms keyboard sd-vconso
 ```
 
 Setup detects the backing device for the mounted root and reads its LUKS UUID.
-It migrates `cryptdevice=...:root` in `/etc/default/limine` to
-`rd.luks.name=<LUKS-UUID>=root`, keeping `/dev/mapper/root` and other Limine
-settings. The optional `allow-discards` flag becomes
-`rd.luks.options=<LUKS-UUID>=discard`. Reruns keep the migrated parameters.
-Keyfile parameters, other mapper names, unsupported encryption options, and
-configurations with no explicit root encryption parameter stop the migration
-before it changes the boot configuration. Setup also checks Limine's effective
-normal and fallback command lines for installed kernels. If another configuration
-overrides the migrated parameters, it restores the previous Limine defaults and
-leaves the mkinitcpio hooks alone.
-
-Existing Limine defaults and the ThinkPad mkinitcpio drop-in are backed up once
-with a `.pre-systemd` suffix. The new command line and hooks are applied together
-after package installation, before rebuilding the boot images.
-
-Before the first migration, review `/etc/mkinitcpio.conf`, its drop-ins and
-presets, `/etc/crypttab`, and `/etc/crypttab.initramfs` for local boot requirements.
-The new hook list replaces existing hooks, so any custom hooks need a systemd
-equivalent or an explicit addition. Check the console keymap in
-`/etc/vconsole.conf` too.
-
-Keep a separate copy of the working UKI and a Limine entry pointing to it before
-rebuilding. A regenerated fallback image uses the new hooks too, so it is not
-a copy of the previous boot setup. After migration, inspect
-`limine-entry-tool --get-cmdline linux` and the built UKI, then reboot and test
-keyboard input, the Plymouth passphrase prompt, root mounting, and desktop login.
-Keep the saved UKI until that boot succeeds.
+It writes the ThinkPad kernel parameters to `/etc/default/limine`, using
+`rd.luks.name=<LUKS-UUID>=root` and `/dev/mapper/root`. Existing Limine defaults
+are replaced without migration or backups. Setup checks effective normal and
+fallback command lines for installed kernels after configuration and before
+building boot images.
+The command line and hooks are applied after package installation, before
+rebuilding the boot images.
 
 ### T2 MacBook Air
 
@@ -156,10 +141,23 @@ installs `limine-tool`. Its pacman hooks rebuild UKIs after kernel and initramfs
 dependency updates, remove entries for uninstalled kernels, and update the EFI
 loader after Limine upgrades. No extra pacman hook or timer is needed.
 
-Both Arch profiles apply the branding and palette from `linux/arch/limine.conf`,
-with a one-second timeout and the first entry selected. Setup replaces those
-shared menu options while preserving other settings and boot entries. It saves
-an existing menu once as `/boot/limine.conf.pre-laptop`.
+Both Arch profiles use `linux/arch/limine-defaults.conf` for `/boot`, UKI
+generation, boot ordering, and snapshot display settings. Both disable discovery
+of other bootloaders and show up to five snapshots using format 5. Setup replaces
+these shared options and machine-specific kernel parameters on each run. Both
+configurations share the same encrypted Btrfs root arguments and the mapper name `root`. Use `root`
+for the encrypted root mapping when installing either OS.
+
+Both profiles disable automatic EFI fallback deployment during setup, build the
+boot images, then enable fallback deployment and install Limine. Later package
+upgrades maintain the fallback loader. Both profiles install with `--fallback`
+through the shared installer. `ENABLE_LIMINE_FALLBACK` controls the EFI fallback
+loader, not mkinitcpio fallback images. MacBook also validates the effective
+`linux-t2` and `linux-t2-fallback` root arguments before its final image build.
+
+Both Arch profiles apply the shared menu settings, branding, and palette from
+`linux/arch/limine.conf`. Setup replaces those menu options while preserving
+other settings and boot entries.
 `limine-tool` maintains generated entries; kernel parameters belong in
 `/etc/default/limine`, while menu settings such as `timeout` belong in
 `/boot/limine.conf`.
@@ -180,14 +178,22 @@ copy hooks once the packaged `80-limine-efi-deploy.hook` is in place.
 
 The script overwrites `/etc/default/limine`,
 `/etc/mkinitcpio.conf.d/10-t2-encryption.conf`, and `/etc/modules-load.d/t2.conf`.
-It saves existing Limine defaults once as `/etc/default/limine.pre-macbook`.
 Check other mkinitcpio drop-ins for settings that could override this configuration.
 
 Both bootloader scripts have separate prepare, configure, and install functions.
-They share boot prerequisite checks, detection of the root LUKS UUID, and the
-systemd hook list in their [mkinitcpio drop-ins](https://man.archlinux.org/man/mkinitcpio.conf.5).
-The ThinkPad extends its existing module list and adds Plymouth; the MacBook
-specifies the modules required for T2 boot. Drop-ins are skipped if mkinitcpio is
+Each configure function takes the root LUKS UUID and calls a machine-specific
+Limine writer through `configure_limine_config`. The shared helper stages the
+output and replaces existing defaults with mode 0644, without backups. Failed
+command-line validation stops setup before rebuilding images. Both install
+functions read the root LUKS UUID, configure boot, validate command lines for
+installed kernels, then build images and install Limine. Neither prepare function
+writes boot configuration.
+They share boot prerequisite checks, detection of the root LUKS UUID, Limine
+defaults, command-line generation and validation, and the systemd hook list in
+their [mkinitcpio drop-ins](https://man.archlinux.org/man/mkinitcpio.conf.5).
+Both profiles replace the module list explicitly: `amdgpu` for ThinkPad and
+the T2 keyboard drivers for MacBook. Both use Plymouth for the boot splash and
+encrypted-root prompt. Drop-ins are skipped if mkinitcpio is
 called with an explicit `--config` or a preset with `ALL_config`.
 
 The script builds the boot images before installing Limine as the EFI fallback
@@ -276,7 +282,7 @@ uname -r
 findmnt /
 findmnt /home
 findmnt /boot
-sudo cryptsetup status cryptroot
+sudo cryptsetup status root
 networkctl status wlan0
 resolvectl status
 sudo snapper list-configs

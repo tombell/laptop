@@ -1,3 +1,2 @@
 amd-ucode # AMD CPU microcode updates for the ThinkPad.
 linux # Stock Arch kernel and modules for the ThinkPad.
-plymouth # Graphical boot splash and encrypted-root prompt in the ThinkPad boot hooks.
