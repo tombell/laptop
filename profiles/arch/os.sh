@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)/common/bootstrap.sh"
+source "$(dirname -- "${BASH_SOURCE[0]}")/../../common/bootstrap.sh"
 setup_laptop_root
 
 machine=${1:-}
@@ -15,7 +15,6 @@ require_regular_user "setup arch os $machine"
 log "Setting up Arch Linux on $machine_name"
 
 source "$ROOT_DIR/linux/arch/bootloader.sh"
-# shellcheck source=/dev/null
 source "$ROOT_DIR/linux/$machine/bootloader.sh"
 # Check prerequisites before package installation; configure boot afterward.
 "prepare_${machine}_bootloader"

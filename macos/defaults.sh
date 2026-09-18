@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)/common/bootstrap.sh"
+source "$(dirname -- "${BASH_SOURCE[0]}")/../common/bootstrap.sh"
 
 log "Configuring macOS defaults"
 
