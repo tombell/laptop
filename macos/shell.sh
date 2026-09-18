@@ -3,19 +3,7 @@ set -euo pipefail
 
 source "$(dirname -- "${BASH_SOURCE[0]}")/../common/bootstrap.sh"
 
-case "$(uname -m)" in
-x86_64)
-  homebrew_prefix=/usr/local
-  ;;
-arm64)
-  homebrew_prefix=/opt/homebrew
-  ;;
-*)
-  die "Unsupported macOS architecture: $(uname -m)"
-  ;;
-esac
-
-fish_shell="$homebrew_prefix/bin/fish"
+fish_shell=/opt/homebrew/bin/fish
 
 if [ ! -x "$fish_shell" ]; then
   die "Homebrew fish was not found at $fish_shell"
