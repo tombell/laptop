@@ -3,9 +3,7 @@ set -euo pipefail
 
 log "Configuring greetd"
 
-if ! grep -Fq 'command = "uwsm start -- hyprland.desktop >/dev/null 2>&1"' "/etc/greetd/config.toml" 2>/dev/null ||
-  ! grep -Fq 'command = "agreety --cmd /usr/bin/fish"' "/etc/greetd/config.toml" 2>/dev/null; then
-  sudo tee /etc/greetd/config.toml <<EOF >/dev/null
+greetd_config=$(cat <<'EOF'
 [terminal]
 vt = 1
 
@@ -17,6 +15,10 @@ user = "greeter"
 command = "uwsm start -- hyprland.desktop >/dev/null 2>&1"
 user = "tombell"
 EOF
+)
+
+if ! cmp -s /etc/greetd/config.toml <<<"$greetd_config"; then
+  sudo tee /etc/greetd/config.toml <<<"$greetd_config" >/dev/null
 fi
 
 sudo systemctl enable greetd.service
