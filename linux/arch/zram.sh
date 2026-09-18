@@ -11,6 +11,7 @@ for zram_directory in /etc/systemd /run/systemd /usr/local/lib/systemd /usr/lib/
     fi
   done
 done
+
 if [[ "$zram_configured" == false ]]; then
   sudo install -Dm644 "$ROOT_DIR/linux/arch/config/zram-generator.conf" /etc/systemd/zram-generator.conf
 else
@@ -21,6 +22,7 @@ zram_dropin=/etc/systemd/system/systemd-zram-setup@zram0.service.d/disable-zswap
 if [[ ! -e "$zram_dropin" && ! -L "$zram_dropin" ]]; then
   sudo install -Dm644 "$ROOT_DIR/linux/arch/config/disable-zswap.conf" "$zram_dropin"
 fi
+
 sudo systemctl daemon-reload
 
 if [[ "$(systemctl show --property=LoadState --value dev-zram0.swap)" == loaded ]]; then
@@ -29,6 +31,7 @@ if [[ "$(systemctl show --property=LoadState --value dev-zram0.swap)" == loaded 
   if systemctl is-active --quiet dev-zram0.swap; then
     sudo sh -c 'if [ -e /sys/module/zswap/parameters/enabled ]; then echo N > /sys/module/zswap/parameters/enabled; fi'
   fi
+
   sudo systemctl start dev-zram0.swap
 else
   log "Keeping existing swap configuration without zram0"
