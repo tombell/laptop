@@ -1,6 +1,6 @@
 # laptop
 
-Setup scripts for my Macs, Arch Linux laptops, and Raspberry Pi.
+Setup scripts for my Macs and Linux laptops
 
 ## Get started
 
