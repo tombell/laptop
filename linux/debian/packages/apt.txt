@@ -1,2 +1,11 @@
+bat
+eza
+fish
+fzf
 git
+git-delta
+neovim
 rcm
+ripgrep
+starship
+zoxide
