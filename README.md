@@ -226,8 +226,8 @@ Setup keeps Wi-Fi credentials in `/var/lib/iwd`. Use `iwctl` or Impala to join a
 new network. It starts network services without restarting active connections.
 New network definitions apply when links next appear or after reboot.
 
-DNS uses systemd-resolved's stub. Setup backs up a different `/etc/resolv.conf`
-once to `/etc/resolv.conf.pre-laptop` before replacing it with the stub symlink.
+DNS uses systemd-resolved's stub. Setup replaces a different `/etc/resolv.conf`
+with the stub symlink without creating a backup.
 
 Zram defaults to zstd compression with half the usable RAM, capped at 4 GiB.
 Setup keeps existing generator configuration and masks, including configurations
