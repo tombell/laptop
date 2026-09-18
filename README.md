@@ -21,13 +21,13 @@ cd ~/.laptop
 
 ## Run setup
 
-| Machine                                     | Command                    |
-| ------------------------------------------- | -------------------------- |
-| Personal Mac                                | `./setup macos personal`   |
-| Work Mac                                    | `./setup macos work`       |
-| ThinkPad with Arch Linux                    | `./setup arch os thinkpad` |
-| MacBook Air (T2) with Arch Linux            | `./setup arch os macbook`  |
-| Raspberry Pi with Debian or Raspberry Pi OS | `./setup debian rpi`       |
+| Machine                          | Command                    |
+| -------------------------------- | -------------------------- |
+| Personal Mac (`Pyra`, `Brighid`) | `./setup macos personal`   |
+| Work Mac (`Haze`)                | `./setup macos work`       |
+| ThinkPad (`thinkpad`)            | `./setup arch os thinkpad` |
+| MacBook Air (T2) (`mythra`)      | `./setup arch os macbook`  |
+| Raspberry Pi (`rpi`)             | `./setup debian rpi`       |
 
 On either Arch laptop, finish with user setup before rebooting:
 
