@@ -6,21 +6,9 @@ setup_laptop_root
 
 profile=${1:-}
 
-case "$profile" in
-personal)
-  dotfile_tags=(macos personal)
-  ssh_keys=(Personal)
-  restart_ssh_agent=false
-  ;;
-work)
-  dotfile_tags=(macos work)
-  ssh_keys=(Personal Work)
-  restart_ssh_agent=true
-  ;;
-*)
-  die "Usage: $0 personal|work"
-  ;;
-esac
+if [[ "$profile" != personal ]]; then
+  die "Usage: $0 personal"
+fi
 
 log "Setting up $profile macOS laptop"
 
@@ -32,17 +20,10 @@ source "$ROOT_DIR/macos/homebrew.sh"
 source "$ROOT_DIR/macos/shell.sh"
 
 ensure_dotfiles
-setup_dotfiles "${dotfile_tags[@]}"
+setup_dotfiles macos personal
 
 signin_1password
-for ssh_key in "${ssh_keys[@]}"; do
-  setup_ssh_key "Personal" "$ssh_key"
-done
-
-if [ "$restart_ssh_agent" = true ]; then
-  log "Stopping ssh-agent"
-  killall ssh-agent 2>/dev/null || true
-fi
+setup_ssh_key "Personal" "Personal"
 
 source "$ROOT_DIR/macos/defaults.sh"
 source "$ROOT_DIR/common/mise.sh"

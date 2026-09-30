@@ -3,8 +3,7 @@
 
 machine = {
   'Pyra' => :personal,
-  'Brighid' => :mini,
-  'Haze' => :work
+  'Brighid' => :mini
 }.fetch(`scutil --get ComputerName`.chomp)
 
 tap 'tombell/formulae', trusted: true
@@ -45,7 +44,7 @@ if %i[personal mini].include?(machine)
   mas 'Xcode', id: 497_799_835
 end
 
-if %i[personal work].include?(machine)
+if machine == :personal
   tap 'conjuror-app/tap', trusted: true
   tap 'starkwm/formulae', trusted: true
 
@@ -72,17 +71,4 @@ when :mini
   brew 'transmission-cli'
 
   cask 'hermes-desktop'
-when :work
-  brew 'cloudflared'
-  brew 'libpq'
-  brew 'libyaml'
-  brew 'mailpit'
-  brew 'postgresql@18'
-  brew 'railway'
-  brew 'redis'
-
-  cask 'claude'
-  cask 'claude-code@latest'
-  cask 'linear'
-  cask 'openlogi'
 end

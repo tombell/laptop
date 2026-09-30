@@ -24,7 +24,6 @@ cd ~/.laptop
 | Machine                          | Command                    |
 | -------------------------------- | -------------------------- |
 | Personal Mac (`Pyra`, `Brighid`) | `./setup macos personal`   |
-| Work Mac (`Haze`)                | `./setup macos work`       |
 | ThinkPad (`thinkpad`)            | `./setup arch os thinkpad` |
 | MacBook Air (T2) (`mythra`)      | `./setup arch os macbook`  |
 | Raspberry Pi (`rpi`)             | `./setup debian rpi`       |
