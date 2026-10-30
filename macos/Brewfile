@@ -32,7 +32,7 @@ cask 'appcleaner'
 cask 'claude-code@latest'
 cask 'codex'
 cask 'daisydisk'
-cask 'ghostty@tip'
+# cask 'ghostty@tip'
 cask 'google-chrome'
 cask 'keka'
 cask 'tombell/formulae/font-iosevka-custom'
@@ -58,8 +58,6 @@ when :personal
   cask 'telegram'
 when :mini
   brew 'container'
-  brew 'ffmpeg'
-  brew 'imagemagick'
   brew 'tailscale'
   brew 'transmission-cli'
 end
