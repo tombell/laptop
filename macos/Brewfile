@@ -24,7 +24,6 @@ brew 'mise'
 brew 'mole'
 brew 'rcm'
 brew 'ripgrep'
-brew 'tombell/formulae/tendr', args: ['HEAD']
 brew 'zoxide'
 
 cask '1password'
