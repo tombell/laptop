@@ -9,7 +9,8 @@ Usage:
   ./setup arch os thinkpad
   ./setup arch os macbook
   ./setup arch user
-  ./setup macos personal
+  ./setup macos pyra
+  ./setup macos brighid
   ./setup debian rpi
 
 Run Arch OS setup first, then user configuration. Use arch user for routine reruns.
@@ -29,7 +30,7 @@ case "$#:$*" in
 "2:arch user")
   exec "$setup_dir/profiles/arch/user.sh"
   ;;
-"2:macos personal")
+"2:macos pyra"|"2:macos brighid")
   exec "$setup_dir/profiles/macos.sh" "$2"
   ;;
 "2:debian rpi")
