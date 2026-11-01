@@ -23,7 +23,8 @@ cd ~/.laptop
 
 | Machine                          | Command                    |
 | -------------------------------- | -------------------------- |
-| Personal Mac (`Pyra`, `Brighid`) | `./setup macos personal`   |
+| Personal Mac (`Pyra`)            | `./setup macos pyra`       |
+| Mac mini (`Brighid`)             | `./setup macos brighid`    |
 | ThinkPad (`thinkpad`)            | `./setup arch os thinkpad` |
 | MacBook Air (T2) (`mythra`)      | `./setup arch os macbook`  |
 | Raspberry Pi (`rpi`)             | `./setup debian rpi`       |
@@ -35,5 +36,7 @@ On either Arch laptop, finish with user setup before rebooting:
 ```
 
 Have your 1Password account ready for SSH key setup on macOS and Arch. Follow the prompts, then start a new login session when setup finishes.
+
+On macOS, setup sets the computer name to match the machine you choose.
 
 To reapply your Arch user settings later, run `./setup arch user` again. Run `./setup --help` to see all setup commands.

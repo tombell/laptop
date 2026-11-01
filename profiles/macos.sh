@@ -4,23 +4,36 @@ set -euo pipefail
 source "$(dirname -- "${BASH_SOURCE[0]}")/../common/bootstrap.sh"
 setup_laptop_root
 
-profile=${1:-}
+case "${1:-}" in
+pyra)
+  computer_name=Pyra
+  role=personal
+  ;;
+brighid)
+  computer_name=Brighid
+  role=mini
+  ;;
+*)
+  die "Usage: $0 pyra|brighid"
+  ;;
+esac
 
-if [[ "$profile" != personal ]]; then
-  die "Usage: $0 personal"
-fi
+export HOMEBREW_LAPTOP_MACHINE=$role
 
-log "Setting up $profile macOS laptop"
+log "Setting up $computer_name ($role) macOS machine"
 
 source "$ROOT_DIR/common/rcm.sh"
 source "$ROOT_DIR/common/ssh.sh"
+
+source "$ROOT_DIR/macos/computer-name.sh"
+set_computer_name "$computer_name"
 
 source "$ROOT_DIR/macos/homebrew.sh"
 
 source "$ROOT_DIR/macos/shell.sh"
 
 ensure_dotfiles
-setup_dotfiles macos personal
+setup_dotfiles macos "$role"
 
 signin_1password
 setup_ssh_key "Personal" "Personal"

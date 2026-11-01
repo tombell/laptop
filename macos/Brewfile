@@ -1,10 +1,14 @@
 # vim: set ft=ruby:
 # frozen_string_literal: true
 
-machine = {
-  'Pyra' => :personal,
-  'Brighid' => :mini
-}.fetch(`scutil --get ComputerName`.chomp)
+machine = ENV.fetch('HOMEBREW_LAPTOP_MACHINE') do
+  {
+    'Pyra' => 'personal',
+    'Brighid' => 'mini'
+  }.fetch(`scutil --get ComputerName`.chomp) do |name|
+    abort "Unknown computer #{name.inspect}; set HOMEBREW_LAPTOP_MACHINE to personal or mini"
+  end
+end.to_sym
 
 tap 'tombell/formulae', trusted: true
 
