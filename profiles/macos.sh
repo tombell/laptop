@@ -29,6 +29,7 @@ source "$ROOT_DIR/macos/computer-name.sh"
 set_computer_name "$computer_name"
 
 source "$ROOT_DIR/macos/homebrew.sh"
+source "$ROOT_DIR/macos/xcode.sh"
 
 source "$ROOT_DIR/macos/shell.sh"
 

@@ -37,6 +37,6 @@ On either Arch laptop, finish with user setup before rebooting:
 
 Have your 1Password account ready for SSH key setup on macOS and Arch. Follow the prompts, then start a new login session when setup finishes.
 
-On macOS, setup sets the computer name to match the machine you choose.
+On macOS, setup sets the computer name and installs Xcode from the App Store. If you are not signed in to the App Store, setup warns and continues; sign in and run `sudo mas get 497799835` later.
 
 To reapply your Arch user settings later, run `./setup arch user` again. Run `./setup --help` to see all setup commands.

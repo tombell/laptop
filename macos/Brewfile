@@ -39,8 +39,6 @@ cask 'google-chrome'
 cask 'keka'
 cask 'tombell/formulae/font-iosevka-custom'
 
-mas 'Xcode', id: 497_799_835
-
 case machine
 when :personal
   tap 'conjuror-app/tap', trusted: true
