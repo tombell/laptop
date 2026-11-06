@@ -51,7 +51,6 @@ when :personal
   brew 'starkwm/formulae/stags'
   brew 'starkwm/formulae/swm'
 
-  cask 'chatgpt'
   cask 'conjuror-app/tap/conjuror@alpha'
   cask 'discord'
   cask 'keyboardcleantool'
