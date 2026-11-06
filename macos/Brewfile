@@ -36,6 +36,7 @@ cask 'claude-code@latest'
 cask 'codex'
 cask 'daisydisk'
 cask 'google-chrome'
+cask 'helium-browser'
 cask 'keka'
 cask 'tombell/formulae/font-iosevka-custom'
 
@@ -57,6 +58,7 @@ when :personal
   cask 'postico'
   cask 'rekordbox'
   cask 'soundsource'
+  cask 't3-code@nightly'
   cask 'tailscale-app'
   cask 'telegram'
 when :mini
