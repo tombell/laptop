@@ -38,6 +38,7 @@ cask 'daisydisk'
 cask 'google-chrome'
 cask 'helium-browser'
 cask 'keka'
+cask 'tailscale-app'
 cask 'tombell/formulae/font-iosevka-custom'
 
 case machine
@@ -58,10 +59,8 @@ when :personal
   cask 'rekordbox'
   cask 'soundsource'
   cask 't3-code@nightly'
-  cask 'tailscale-app'
   cask 'telegram'
 when :mini
   brew 'container'
-  brew 'tailscale'
   brew 'transmission-cli'
 end
