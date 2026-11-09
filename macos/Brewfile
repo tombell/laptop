@@ -13,6 +13,7 @@ end.to_sym
 tap 'tombell/formulae', trusted: true
 
 brew 'bat'
+brew 'container'
 brew 'eza'
 brew 'fd'
 brew 'fish'
@@ -61,6 +62,5 @@ when :personal
   cask 't3-code@nightly'
   cask 'telegram'
 when :mini
-  brew 'container'
   brew 'transmission-cli'
 end
