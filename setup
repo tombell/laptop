@@ -21,11 +21,8 @@ case "$#:$*" in
 "0:"|"1:--help"|"1:-h")
   usage
   ;;
-"3:arch os thinkpad")
-  exec "$setup_dir/profiles/arch/thinkpad.sh"
-  ;;
-"3:arch os macbook")
-  exec "$setup_dir/profiles/arch/macbook.sh"
+"3:arch os thinkpad"|"3:arch os macbook")
+  exec bash "$setup_dir/profiles/arch/os.sh" "$3"
   ;;
 "2:arch user")
   exec "$setup_dir/profiles/arch/user.sh"
