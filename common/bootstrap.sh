@@ -38,7 +38,9 @@ ensure_dotfiles() {
 }
 
 signin_1password() {
+  local session_exports
   require_command op "sign in to 1Password"
   log "Signing in to 1Password"
-  eval "$(op signin)"
+  session_exports=$(op signin) || return
+  eval "$session_exports"
 }

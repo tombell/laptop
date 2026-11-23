@@ -19,9 +19,6 @@ setup_dotfiles linux
 source "$ROOT_DIR/linux/shared/desktop.sh"
 source "$ROOT_DIR/linux/shared/audio.sh"
 
-if [[ ! -e "$HOME/.ssh/Personal" || ! -e "$HOME/.ssh/Personal.pub" ]]; then
-  signin_1password
-fi
 setup_ssh_key "Personal" "Personal"
 
 source "$ROOT_DIR/linux/shared/shell.sh"

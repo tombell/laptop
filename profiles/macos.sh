@@ -36,7 +36,6 @@ source "$ROOT_DIR/macos/shell.sh"
 ensure_dotfiles
 setup_dotfiles macos "$role"
 
-signin_1password
 setup_ssh_key "Personal" "Personal"
 
 source "$ROOT_DIR/macos/defaults.sh"

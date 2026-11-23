@@ -9,7 +9,9 @@ setup_ssh_key() {
   local temp_public_key
   local temp_private_key
 
-  require_command op "set up SSH keys"
+  if [[ ! -e "$public_key" || ! -e "$private_key" ]]; then
+    signin_1password || return
+  fi
 
   mkdir -p "$HOME/.ssh"
   chmod 700 "$HOME/.ssh"
