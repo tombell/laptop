@@ -13,6 +13,7 @@ fish # Login shell configured by the shared shell setup.
 fzf # Fuzzy selection for shell history, files, and command output.
 git # Clone and update laptop, dotfiles, and development repositories.
 git-delta # Readable syntax-highlighted Git diffs.
+git-lfs # Fetch and store large files tracked by Git LFS.
 github-cli # Manage GitHub repositories, issues, and pull requests from the terminal.
 gst-plugin-pipewire # Connect GStreamer applications to PipeWire.
 iwd # Wi-Fi authentication and saved-network connections, with networkd managing IP configuration.

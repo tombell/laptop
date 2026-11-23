@@ -4,6 +4,7 @@ fish
 fzf
 git
 git-delta
+git-lfs
 neovim
 rcm
 ripgrep
