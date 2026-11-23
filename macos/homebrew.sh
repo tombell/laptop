@@ -3,7 +3,7 @@ set -euo pipefail
 
 source "$(dirname -- "${BASH_SOURCE[0]}")/../common/bootstrap.sh"
 
-if ! command -v brew &>/dev/null; then
+if ! command -v brew &>/dev/null && [[ ! -x /opt/homebrew/bin/brew ]]; then
   require_command curl "install Homebrew"
   log "Installing Homebrew"
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
