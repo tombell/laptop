@@ -12,6 +12,11 @@ check_encrypted_boot_prerequisites() {
     die "Expected Btrfs subvolume @ mounted at /"
   fi
 
+  # Btrfs subvolume roots have inode 256, including nested subvolumes.
+  if [[ /home -ef / || "$(findmnt -nro FSTYPE --target /home)" != btrfs || "$(stat -Lc %i /home)" != 256 ]]; then
+    die "Expected a separate Btrfs subvolume at /home for Snapper"
+  fi
+
   if [ "$(findmnt -nro FSTYPE --mountpoint /boot)" != vfat ]; then
     die "Mount the FAT EFI system partition at /boot before running this profile"
   fi

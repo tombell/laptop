@@ -6,6 +6,8 @@ Setup scripts for my Macs and Linux laptops
 
 Start with a working OS, internet access, Git, and sudo access. Run setup as your regular user. These scripts apply my personal settings.
 
+Both Arch profiles expect x86_64 UEFI boot, a FAT EFI system partition mounted at `/boot`, and Btrfs subvolume `@` mounted at `/` on a directly mapped LUKS volume. Snapper also needs a separate Btrfs subvolume at `/home`, either nested or mounted there.
+
 On a fresh Mac, install the Command Line Tools first:
 
 ```sh
