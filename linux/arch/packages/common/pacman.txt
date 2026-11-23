@@ -6,6 +6,7 @@ btrfs-progs # Btrfs filesystem tools for root and home snapshot setup on Arch.
 cryptsetup # Configure and unlock the LUKS-encrypted root filesystems.
 dosfstools # Check and maintain the FAT EFI system partitions.
 efibootmgr # Inspect and manage firmware EFI boot entries.
+eza # Directory listings for the fish l, ll, la, and tree aliases.
 fastfetch # Display system and hardware details in the terminal.
 fd # Fast file finding for command-line and editor workflows.
 fish # Login shell configured by the shared shell setup.
