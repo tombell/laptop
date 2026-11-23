@@ -40,4 +40,13 @@ setup_dotfiles() {
       -S agents/skills -S config/rex/custom_ui \
       -x LICENSE -x README.md
   fi
+
+  log "Building the bat theme cache"
+  if command -v bat >/dev/null; then
+    bat cache --build
+  else
+    # Debian provides bat as batcat.
+    require_command batcat "build the bat theme cache"
+    batcat cache --build
+  fi
 }
