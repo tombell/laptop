@@ -3,19 +3,26 @@ set -euo pipefail
 
 log "Configuring iwd, systemd-networkd, and systemd-resolved"
 
-# Keep existing administrator and generated network definitions, including masks.
-network_configured=false
-for network_directory in /etc/systemd/network /run/systemd/network /usr/local/lib/systemd/network; do
+network_templates="$ROOT_DIR/linux/arch/config/network"
+network_dest=/etc/systemd/network
+keep_existing_network=false
+for network_directory in "$network_dest" /run/systemd/network /usr/local/lib/systemd/network; do
   for network_file in "$network_directory"/*.network; do
-    if [[ -e "$network_file" || -L "$network_file" ]]; then
-      network_configured=true
+    [[ -e "$network_file" || -L "$network_file" ]] || continue
+    # A previous run may have installed only some of our templates.
+    if [[ "$network_directory" == "$network_dest" && -f "$network_file" && ! -L "$network_file" ]] &&
+      cmp -s "$network_file" "$network_templates/${network_file##*/}"; then
+      continue
     fi
+    keep_existing_network=true
+    break 2
   done
 done
 
-if [[ "$network_configured" == false ]]; then
-  for network_file in "$ROOT_DIR/linux/arch/config/network/"*.network; do
-    sudo install -Dm644 "$network_file" "/etc/systemd/network/${network_file##*/}"
+if [[ "$keep_existing_network" == false ]]; then
+  for network_file in "$network_templates"/*.network; do
+    dest_file="$network_dest/${network_file##*/}"
+    [[ -e "$dest_file" || -L "$dest_file" ]] || sudo install -Dm644 "$network_file" "$dest_file"
   done
 else
   log "Keeping existing networkd configuration"
