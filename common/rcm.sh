@@ -31,13 +31,13 @@ setup_dotfiles() {
   if [ "${#extra_args[@]}" -gt 0 ]; then
     rcup -d "${HOME}/.dotfiles" \
       "${tag_args[@]}" \
-      -S agents/skills \
+      -S agents/skills -S config/rex/custom_ui \
       -x LICENSE -x README.md \
       "${extra_args[@]}"
   else
     rcup -d "${HOME}/.dotfiles" \
       "${tag_args[@]}" \
-      -S agents/skills \
+      -S agents/skills -S config/rex/custom_ui \
       -x LICENSE -x README.md
   fi
 }
