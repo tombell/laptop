@@ -10,5 +10,7 @@ source "$ROOT_DIR/linux/debian/packages.sh"
 source "$ROOT_DIR/linux/shared/shell.sh"
 
 ensure_dotfiles
-# Install base dotfiles without editor, agent, Pi, or SSH configuration.
-setup_dotfiles -- -x agents -x config/nvim -x pi -x ssh/config
+# Skip the Claude skills hook along with the agent, editor, and SSH configs.
+setup_dotfiles -- -K \
+  -x agents -x claude -x codex -x gemini -x t3 \
+  -x config/nvim -x ssh/config
