@@ -26,17 +26,20 @@ brew 'jj'
 brew 'mas'
 brew 'mise'
 brew 'mole'
+brew 'opencode'
 brew 'rcm'
 brew 'ripgrep'
 brew 'zoxide'
 
 cask '1password'
 cask '1password-cli'
+cask 'antigravity-cli'
 cask 'appcleaner'
 cask 'claude-code@latest'
 cask 'codex'
 cask 'daisydisk'
 cask 'google-chrome'
+cask 'grok-bot'
 cask 'helium-browser'
 cask 'keka'
 cask 'tailscale-app'
@@ -47,10 +50,7 @@ when :personal
   tap 'conjuror-app/tap', trusted: true
   tap 'starkwm/formulae', trusted: true
 
-  brew 'starkwm/formulae/sbar'
-  brew 'starkwm/formulae/sborders'
   brew 'starkwm/formulae/skbd@2'
-  brew 'starkwm/formulae/stags'
   brew 'starkwm/formulae/swm'
 
   cask 'conjuror-app/tap/conjuror@alpha'
