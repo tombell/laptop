@@ -10,7 +10,6 @@ source "$ROOT_DIR/linux/debian/packages.sh"
 source "$ROOT_DIR/linux/shared/shell.sh"
 
 ensure_dotfiles
-# Omit the ai tag, and skip the Claude skills hook and the t3, editor, and SSH configs.
+# Omit the ai tag, and skip the Claude skills hook and the editor and SSH configs.
 setup_dotfiles -- -K \
-  -x t3 \
   -x config/nvim -x ssh/config
