@@ -15,7 +15,7 @@ source "$ROOT_DIR/common/rcm.sh"
 source "$ROOT_DIR/common/ssh.sh"
 
 ensure_dotfiles
-setup_dotfiles linux
+setup_dotfiles linux ai
 source "$ROOT_DIR/linux/shared/desktop.sh"
 source "$ROOT_DIR/linux/shared/audio.sh"
 

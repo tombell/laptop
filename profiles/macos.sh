@@ -34,7 +34,7 @@ source "$ROOT_DIR/macos/xcode.sh"
 source "$ROOT_DIR/macos/shell.sh"
 
 ensure_dotfiles
-setup_dotfiles macos "$role"
+setup_dotfiles macos "$role" ai
 
 setup_ssh_key "Personal" "Personal"
 
