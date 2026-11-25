@@ -8,10 +8,12 @@ case "${1:-}" in
 pyra)
   computer_name=Pyra
   role=personal
+  dotfiles_tags=(macos personal ai)
   ;;
 brighid)
   computer_name=Brighid
   role=mini
+  dotfiles_tags=(macos mini ai)
   ;;
 *)
   die "Usage: $0 pyra|brighid"
@@ -34,7 +36,7 @@ source "$ROOT_DIR/macos/xcode.sh"
 source "$ROOT_DIR/macos/shell.sh"
 
 ensure_dotfiles
-setup_dotfiles macos "$role" ai
+setup_dotfiles "${dotfiles_tags[@]}"
 
 setup_ssh_key "Personal" "Personal"
 
