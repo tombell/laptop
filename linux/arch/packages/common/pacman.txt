@@ -4,6 +4,7 @@ bluez-utils # Bluetooth command-line tools for pairing and troubleshooting.
 btop # Interactive CPU, memory, disk, and process monitoring.
 btrfs-progs # Btrfs filesystem tools for root and home snapshot setup on Arch.
 cryptsetup # Configure and unlock the LUKS-encrypted root filesystems.
+difftastic # Syntax-aware side-by-side diffs for git and jj.
 dosfstools # Check and maintain the FAT EFI system partitions.
 efibootmgr # Inspect and manage firmware EFI boot entries.
 eza # Directory listings for the fish l, ll, la, and tree aliases.
@@ -12,7 +13,6 @@ fd # Fast file finding for command-line and editor workflows.
 fish # Login shell configured by the shared shell setup.
 fzf # Fuzzy selection for shell history, files, and command output.
 git # Clone and update laptop, dotfiles, and development repositories.
-git-delta # Readable syntax-highlighted Git diffs.
 git-lfs # Fetch and store large files tracked by Git LFS.
 github-cli # Manage GitHub repositories, issues, and pull requests from the terminal.
 gst-plugin-pipewire # Connect GStreamer applications to PipeWire.
